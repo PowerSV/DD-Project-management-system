@@ -9,10 +9,10 @@
     <version>${revision}${changelist}</version>
     <packaging>pom</packaging>
     <modules>
-        <module>web</module>
-        <module>business</module>
-        <module>dto</module>
-        <module>app</module>
+        <module>project-system-web</module>
+        <module>project-system-business</module>
+        <module>project-system-dto</module>
+        <module>project-system-app</module>
     </modules>
 
     <properties>
@@ -32,7 +32,7 @@
                     <finalName>sample-exec</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.digdes.school.MainApp</mainClass>
+                            <mainClass>com.digdes.school.app.MainApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
