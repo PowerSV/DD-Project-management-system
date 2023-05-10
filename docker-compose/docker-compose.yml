@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   app:
-    image: 'online-shop'
+    image: 'project-management'
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/online-shop
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/project-manage-sys
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create
@@ -26,7 +26,7 @@ services:
     environment:
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=online-shop
+      - POSTGRES_DB=project-manage-sys
     networks:
       - net
 

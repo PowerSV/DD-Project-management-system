@@ -1,7 +1,5 @@
-
-
-FROM openjdk:8-alpine
-ARG JAR_FILE=target/online-shop-0.0.1-SNAPSHOT.jar
-WORKDIR /app
-ADD $JAR_FILE online-shop-backend.jar
-ENTRYPOINT ["java","-jar","online-shop-backend.jar"]
+FROM openjdk:18.0.2.1-slim-buster
+ARG JAR_FILE=target/sample.jar
+WORKDIR /opt/app
+ADD $JAR_FILE sample.jar
+ENTRYPOINT ["java","-jar","sample.jar"]
