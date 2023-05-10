@@ -18,13 +18,13 @@ public class MainApp {
         System.out.println(createdEmployee1);
 
 
-        CreateEmployeeDTO createdEmployee2 = new CreateEmployeeDTO();
-        createdEmployee2.setFirstName("Дима");
-        createdEmployee2.setFirstName("Какой");
+        CreateEmployeeDTO newEmployee2 = new CreateEmployeeDTO();
+        newEmployee2.setFirstName("Дима");
+        newEmployee2.setFirstName("Какой");
 
         System.out.println("===== Created employee 2 ========");
-        EmployeeDTO createdemployee2 = employeeController.create(createdEmployee2);
-        System.out.println(createdemployee2);
+        EmployeeDTO createdEmployee2 = employeeController.create(newEmployee2);
+        System.out.println(createdEmployee2);
 
         System.out.println("======== All employee =========");
         List<EmployeeDTO> allEmployees = employeeController.getAll();
