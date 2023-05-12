@@ -1,5 +1,5 @@
 package com.digdes.school.models.statuses;
 
-public enum EmployeeStatus {
+public enum MemberStatus {
     ACTIVE, DELETED
 }

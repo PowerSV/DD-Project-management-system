@@ -1,6 +1,6 @@
-package com.digdes.school.dto.employee;
+package com.digdes.school.dto.member;
 
-public class EmployeeDTO {
+public class MemberDTO {
 
     private Long id;
     private String displayName;

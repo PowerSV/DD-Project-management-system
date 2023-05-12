@@ -13,7 +13,7 @@ public class Task {
     private Date deadline;
     private Date lastModified;
     private TaskStatus taskStatus;
-    private Employee author;
+    private Member author;
 
     public Long getId() {
         return id;
@@ -71,11 +71,11 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public Employee getAuthor() {
+    public Member getAuthor() {
         return author;
     }
 
-    public void setAuthor(Employee author) {
+    public void setAuthor(Member author) {
         this.author = author;
     }
 }

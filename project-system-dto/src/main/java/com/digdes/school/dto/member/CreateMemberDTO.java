@@ -1,6 +1,6 @@
-package com.digdes.school.dto.employee;
+package com.digdes.school.dto.member;
 
-public class CreateEmployeeDTO {
+public class CreateMemberDTO {
 
     private String firstName;
     private String lastName;

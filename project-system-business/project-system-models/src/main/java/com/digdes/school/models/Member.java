@@ -1,13 +1,13 @@
 package com.digdes.school.models;
 
-import com.digdes.school.models.statuses.EmployeeStatus;
+import com.digdes.school.models.statuses.MemberStatus;
 
-public class Employee {
+public class Member {
 
     private Long id;
     private String firstName;
     private String lastName;
-    private EmployeeStatus employeeStatus;
+    private MemberStatus memberStatus;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public EmployeeStatus getStatus() {
-        return employeeStatus;
+    public MemberStatus getStatus() {
+        return memberStatus;
     }
 
-    public void setStatus(EmployeeStatus employeeStatus) {
-        this.employeeStatus = employeeStatus;
+    public void setStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
     }
 }
