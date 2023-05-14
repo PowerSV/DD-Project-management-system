@@ -1,20 +1,20 @@
 package com.digdes.school.services;
 
 
-import com.digdes.school.dto.member.CreateMemberDTO;
+import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 
 import java.util.List;
 
 public interface MemberService {
 
-    MemberDTO create(CreateMemberDTO dto);
+    MemberDTO create(CreateUpdateMemberDTO dto);
 
-    MemberDTO update(MemberDTO dto);
+    MemberDTO update(CreateUpdateMemberDTO dto, Long id);
 
     MemberDTO delete(Long id);
 
-    List<MemberDTO> search();
+    List<MemberDTO> search(String pattern);
 
     MemberDTO getMember(Long id);
 

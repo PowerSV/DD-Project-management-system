@@ -1,13 +1,14 @@
 package com.digdes.school.services.impl;
 
 import com.digdes.school.models.Member;
-import com.digdes.school.dto.member.CreateMemberDTO;
+import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.repos.impl.MemberRepositoryImpl;
 import com.digdes.school.mapping.MemberMapper;
 import com.digdes.school.services.MemberService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MemberServiceImpl implements MemberService {
@@ -16,30 +17,41 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepositoryImpl memberRepository = new MemberRepositoryImpl();
 
     @Override
-    public MemberDTO create(CreateMemberDTO newMember) {
+    public MemberDTO create(CreateUpdateMemberDTO newMember) {
         Member member = memberMapper.create(newMember);
         member = memberRepository.createMember(member);
         return memberMapper.map(member);
     }
 
     @Override
-    public MemberDTO update(MemberDTO dto) {
-        return null;
+    public MemberDTO update(CreateUpdateMemberDTO dto, Long id) {
+        Member member = memberMapper.create(dto);
+        member.setId(id);
+        member = memberRepository.updateMember(member);
+        return memberMapper.map(member);
     }
 
     @Override
     public MemberDTO delete(Long id) {
-        return null;
+        Member member = memberRepository.deleteById(id);
+        return memberMapper.map(member);
     }
 
     @Override
-    public List<MemberDTO> search() {
-        return null;
+    public List<MemberDTO> search(String pattern) {
+        List<Member> members = memberRepository.searchMembers(pattern);
+        return members.stream()
+                .map(memberMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
     public MemberDTO getMember(Long id) {
-        return null;
+        Optional<Member> member = memberRepository.getById(id);
+        if (member.isEmpty()) {
+            return  new MemberDTO();
+        }
+        return memberMapper.map(member.get());
     }
 
     @Override
@@ -50,6 +62,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberDTO> getAll() {
         List<Member> members = memberRepository.getAll();
-        return members.stream().map(memberMapper::map).collect(Collectors.toList());
+        return members.stream()
+                .map(memberMapper::map)
+                .collect(Collectors.toList());
     }
 }
