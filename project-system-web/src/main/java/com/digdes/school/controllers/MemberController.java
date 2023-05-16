@@ -15,8 +15,8 @@ public class MemberController {
         return memberService.create(request);
     }
 
-    public MemberDTO update(CreateUpdateMemberDTO request, Long id) {
-        return memberService.update(request, id);
+    public MemberDTO update(CreateUpdateMemberDTO request) {
+        return memberService.update(request);
     }
 
     public MemberDTO getById(Long id) {

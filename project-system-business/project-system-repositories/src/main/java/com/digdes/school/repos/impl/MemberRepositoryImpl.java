@@ -1,7 +1,7 @@
 package com.digdes.school.repos.impl;
 
 import com.digdes.school.models.Member;
-import com.digdes.school.repos.MemberRepository;
+import com.digdes.school.repos.Repository;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MemberRepositoryImpl implements MemberRepository<Member> {
+public class MemberRepositoryImpl implements Repository<Member> {
 
     private final List<Member> members;
     private final Path fileStoragePath = Path.of("data-storage.txt");
@@ -63,7 +63,7 @@ public class MemberRepositoryImpl implements MemberRepository<Member> {
     }
 
     @Override
-    public Member createMember(Member member) {
+    public Member create(Member member) {
         member.setId(idGenerator.incrementAndGet());
         members.add(member);
         saveMembers(members);
@@ -71,7 +71,7 @@ public class MemberRepositoryImpl implements MemberRepository<Member> {
     }
 
     @Override
-    public Member updateMember(Member member) {
+    public Member update(Member member) {
         removeMemberFromCache(member.getId());
         members.add(member);
         saveMembers(members);
@@ -94,7 +94,6 @@ public class MemberRepositoryImpl implements MemberRepository<Member> {
         return memberToRemove;
     }
 
-    @Override
     public List<Member> searchMembers(String pattern) {
         return null;
     }

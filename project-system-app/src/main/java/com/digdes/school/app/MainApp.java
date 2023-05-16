@@ -30,8 +30,9 @@ public class MainApp {
         System.out.println();
 
         newMember2.setMiddleName("Викторович");
+        newMember2.setId(createdMember2.getId());
         System.out.println("===== updated member 2 ========");
-        MemberDTO updatedMember2 = MEMBER_CONTROLLER.update(newMember2, 2L);
+        MemberDTO updatedMember2 = MEMBER_CONTROLLER.update(newMember2);
         System.out.println(updatedMember2);
         System.out.println("===== File content ========");
         System.out.println(MEMBER_CONTROLLER.getAll());

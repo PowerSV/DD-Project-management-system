@@ -10,7 +10,7 @@ public interface MemberService {
 
     MemberDTO create(CreateUpdateMemberDTO dto);
 
-    MemberDTO update(CreateUpdateMemberDTO dto, Long id);
+    MemberDTO update(CreateUpdateMemberDTO dto);
 
     MemberDTO delete(Long id);
 

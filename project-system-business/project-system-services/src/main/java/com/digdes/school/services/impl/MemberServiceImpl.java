@@ -19,15 +19,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO create(CreateUpdateMemberDTO newMember) {
         Member member = memberMapper.create(newMember);
-        member = memberRepository.createMember(member);
+        member = memberRepository.create(member);
         return memberMapper.map(member);
     }
 
     @Override
-    public MemberDTO update(CreateUpdateMemberDTO dto, Long id) {
+    public MemberDTO update(CreateUpdateMemberDTO dto) {
         Member member = memberMapper.create(dto);
-        member.setId(id);
-        member = memberRepository.updateMember(member);
+        member.setId(dto.getId());
+        member = memberRepository.update(member);
         return memberMapper.map(member);
     }
 
@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO getMember(String uz) {
+    public MemberDTO getMember(String account) {
         return null;
     }
 
