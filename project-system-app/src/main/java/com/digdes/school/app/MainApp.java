@@ -45,7 +45,7 @@ public class MainApp {
         System.out.println(MEMBER_CONTROLLER.getAll());
         System.out.println();
 
-        MemberDTO deletedMember = MEMBER_CONTROLLER.deleteById(2L);
+        MemberDTO deletedMember = MEMBER_CONTROLLER.deleteById(createdMember2.getId());
         System.out.println("===== deleted member ========");
         System.out.println(deletedMember);
         System.out.println("===== File content  ========");
