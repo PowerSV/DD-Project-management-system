@@ -3,7 +3,6 @@ package com.digdes.school.repos.impl;
 import com.digdes.school.models.Member;
 import com.digdes.school.repos.MemberRepository;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,21 +20,32 @@ public class MemberRepositoryImpl implements MemberRepository<Member> {
     private final AtomicLong idGenerator;
 
     public MemberRepositoryImpl() {
-        members = loadMembers();
-        idGenerator = new AtomicLong(
-                members.stream()
-                        .map(Member::getId)
-                        .max(Long::compareTo)
-                        .orElse(0L)
-        );
+        byte[] temp;
+        try {
+            temp = Files.readAllBytes(fileStoragePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (temp.length != 0) {
+            members = loadMembers();
+            idGenerator = new AtomicLong(
+                    members.stream()
+                            .map(Member::getId)
+                            .max(Long::compareTo)
+                            .orElse(0L)
+            );
+        } else {
+            members = new ArrayList<>();
+            idGenerator = new AtomicLong(0L);
+        }
+
     }
 
     private List<Member> loadMembers() {
         List<Member> result = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(fileStoragePath))) {
             result = (ArrayList<Member>) ois.readObject();
-        } catch (EOFException e) {
-            result = new ArrayList<>();
         } catch (IOException | ClassCastException | ClassNotFoundException e) {
             e.printStackTrace();
         }
