@@ -5,18 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.digdes.school</groupId>
-        <artifactId>project-management-system</artifactId>
+        <artifactId>project-system-business</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>project-system-business</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>project-system-services</module>
-        <module>project-system-models</module>
-        <module>project-system-repositories</module>
-        <module>project-system-dao</module>
-    </modules>
+    <artifactId>project-system-dao</artifactId>
 
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
