@@ -82,4 +82,6 @@ values (3, CURRENT_TIMESTAMP, '2023-05-20 12:00:00+00', 'Task 1 description', NU
        (2, CURRENT_TIMESTAMP, '2023-05-22 15:30:00+00', 'Task 2 description', NULL, 'Task 2', 'InProgress', 2, 1),
        (1, CURRENT_TIMESTAMP, '2023-05-25 10:00:00+00', 'Task 3 description', NULL, 'Task 3', 'closed', 3, 3);
 
-
+SELECT tm.team_id, m.firstname, m.lastname, tm.role
+FROM team_membership tm
+         JOIN member m ON tm.member_id = m.id;
