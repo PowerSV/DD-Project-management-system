@@ -67,11 +67,11 @@ select *
 from member;
 
 insert into team_membership(team_id, member_id, role)
-values (1, 1, 'tester'),
-       (1, 2, 'dev'),
-       (1, 3, 'dev'),
-       (2, 1, 'tester'),
-       (2, 3, 'dev');
+values (1, 1, 'TESTER'),
+       (1, 2, 'DEVELOPER'),
+       (1, 3, 'DEVELOPER'),
+       (2, 1, 'TESTER'),
+       (2, 3, 'DEVELOPER');
 
 select *
 from team_membership;
