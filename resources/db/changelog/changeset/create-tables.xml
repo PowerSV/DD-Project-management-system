@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet author="Ballo.Alexey" id="initial-0">
+        <createTable tableName="member">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="account" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="firstname" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middleName" type="text"/>
+            <column name="position" type="text"/>
+            <column name="status" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="create-table-member">
+        <createTable tableName="member">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="account" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="text">
+                <constraints unique="true"/>
+            </column>
+            <column name="firstname" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middleName" type="text"/>
+            <column name="position" type="text"/>
+            <column name="status" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="createTable-project">
+        <createTable tableName="project">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="createTable-team">
+        <createTable tableName="team">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="project_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="addForeignKey-team-project">
+        <addForeignKeyConstraint baseTableName="team"
+                                 baseColumnNames="project_id"
+                                 constraintName="fk_team_project"
+                                 referencedTableName="project"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="createTable-team_membership">
+        <createTable tableName="team_membership">
+            <column name="team_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="member_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <constraints primaryKey="true">
+                <primaryKey columnNames="team_id, member_id"/>
+            </constraints>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="addForeignKey-team_membership-team">
+        <addForeignKeyConstraint baseTableName="team_membership"
+                                 baseColumnNames="team_id"
+                                 constraintName="fk_team_membership_team"
+                                 referencedTableName="team"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="addForeignKey-team_membership-member">
+        <addForeignKeyConstraint baseTableName="team_membership"
+                                 baseColumnNames="member_id"
+                                 constraintName="fk_team_membership_member"
+                                 referencedTableName="member"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="createTable-task">
+        <createTable tableName="task">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="complexity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deadline" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="last_modified_date" type="timestamptz"/>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assignee_id" type="bigint">
+            </column>
+            <column name="author_id" type="bigint">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="addForeignKey-task-assignee">
+        <addForeignKeyConstraint baseTableName="task"
+                                 baseColumnNames="assignee_id"
+                                 constraintName="fk_task_assignee"
+                                 referencedTableName="member"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="addForeignKey-task-author">
+        <addForeignKeyConstraint baseTableName="task"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_task_author"
+                                 referencedTableName="member"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
+
