@@ -1,35 +1,55 @@
 package com.digdes.school.app;
 
 import com.digdes.school.controllers.MemberController;
-import com.digdes.school.dto.member.CreateMemberDTO;
+import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
-
-import java.util.List;
 
 public class MainApp {
 
     private static final MemberController MEMBER_CONTROLLER = new MemberController();
 
     public static void main(String... args){
-        CreateMemberDTO newEmployee1 = new CreateMemberDTO();
-        newEmployee1.setFirstName("Иван");
-        newEmployee1.setFirstName("Федорович");
-        MemberDTO createdEmployee1 = MEMBER_CONTROLLER.create(newEmployee1);
-        System.out.println("===== Created employee 1========");
-        System.out.println(createdEmployee1);
+        CreateUpdateMemberDTO newMember1 = new CreateUpdateMemberDTO();
+        newMember1.setFirstName("Иван");
+        newMember1.setMiddleName("Федорович");
+        MemberDTO createdMember1 = MEMBER_CONTROLLER.create(newMember1);
+        System.out.println("===== Created member 1========");
+        System.out.println(createdMember1);
+        System.out.println("===== File content ========");
+        System.out.println(MEMBER_CONTROLLER.getAll());
+        System.out.println();
 
+        CreateUpdateMemberDTO newMember2 = new CreateUpdateMemberDTO();
+        newMember2.setFirstName("Дима");
+        newMember2.setMiddleName("Какойтович");
+        System.out.println("===== Created member 2 ========");
+        MemberDTO createdMember2 = MEMBER_CONTROLLER.create(newMember2);
+        System.out.println(createdMember2);
+        System.out.println("===== File content ========");
+        System.out.println(MEMBER_CONTROLLER.getAll());
+        System.out.println();
 
-        CreateMemberDTO newEmployee2 = new CreateMemberDTO();
-        newEmployee2.setFirstName("Дима");
-        newEmployee2.setFirstName("Какой");
+        newMember2.setMiddleName("Викторович");
+        newMember2.setId(createdMember2.getId());
+        System.out.println("===== updated member 2 ========");
+        MemberDTO updatedMember2 = MEMBER_CONTROLLER.update(newMember2);
+        System.out.println(updatedMember2);
+        System.out.println("===== File content ========");
+        System.out.println(MEMBER_CONTROLLER.getAll());
+        System.out.println();
 
-        System.out.println("===== Created employee 2 ========");
-        MemberDTO createdEmployee2 = MEMBER_CONTROLLER.create(newEmployee2);
-        System.out.println(createdEmployee2);
+        MemberDTO selectedMember = MEMBER_CONTROLLER.getById(1L);
+        System.out.println("===== selected member ========");
+        System.out.println(selectedMember);
+        System.out.println("===== File content  ========");
+        System.out.println(MEMBER_CONTROLLER.getAll());
+        System.out.println();
 
-        System.out.println("======== All employee =========");
-        List<MemberDTO> allEmployees = MEMBER_CONTROLLER.getAll();
-        System.out.println(allEmployees);
-
+        MemberDTO deletedMember = MEMBER_CONTROLLER.deleteById(createdMember2.getId());
+        System.out.println("===== deleted member ========");
+        System.out.println(deletedMember);
+        System.out.println("===== File content  ========");
+        System.out.println(MEMBER_CONTROLLER.getAll());
+        System.out.println();
     }
 }

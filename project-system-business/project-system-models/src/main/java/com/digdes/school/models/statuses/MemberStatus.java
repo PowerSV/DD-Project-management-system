@@ -1,5 +1,7 @@
 package com.digdes.school.models.statuses;
 
-public enum MemberStatus {
+import java.io.Serializable;
+
+public enum MemberStatus implements Serializable {
     ACTIVE, DELETED
 }

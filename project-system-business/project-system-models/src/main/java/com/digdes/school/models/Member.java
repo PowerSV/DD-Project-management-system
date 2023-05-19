@@ -1,43 +1,19 @@
 package com.digdes.school.models;
 
-import com.digdes.school.models.statuses.MemberStatus;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class Member {
+import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
+public class Member implements Serializable {
     private Long id;
-    private String firstName;
     private String lastName;
-    private MemberStatus memberStatus;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public MemberStatus getStatus() {
-        return memberStatus;
-    }
-
-    public void setStatus(MemberStatus memberStatus) {
-        this.memberStatus = memberStatus;
-    }
+    private String firstName;
+    private String middleName;
+    private String position;
+    private String account;
+    private String email;
+//    private MemberStatus status;
 }

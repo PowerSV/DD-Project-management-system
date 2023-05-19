@@ -3,9 +3,11 @@ package com.digdes.school.dto.member;
 import lombok.Data;
 
 @Data
-public class MemberDTO {
+public class CreateUpdateMemberDTO {
     private Long id;
-    private String displayName;
+    private String firstName;
+    private String lastName;
+    private String middleName;
     private String position;
     private String email;
 }
