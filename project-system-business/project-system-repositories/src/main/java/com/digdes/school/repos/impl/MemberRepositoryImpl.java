@@ -2,7 +2,7 @@ package com.digdes.school.repos.impl;
 
 import com.digdes.school.dto.member.SearchMemberFilter;
 import com.digdes.school.models.Member;
-import com.digdes.school.repos.MemberRepository;
+import com.digdes.school.repos.AbstractMemberRepository;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MemberRepositoryImpl implements MemberRepository<Member> {
+public class MemberRepositoryImpl implements AbstractMemberRepository<Member> {
 
     private final List<Member> members;
     private final Path fileStoragePath = Path.of("data-storage.txt");

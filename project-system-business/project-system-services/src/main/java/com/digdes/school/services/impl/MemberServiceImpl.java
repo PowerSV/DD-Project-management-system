@@ -6,7 +6,7 @@ import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.dto.member.SearchMemberFilter;
 import com.digdes.school.mapping.MemberMapper;
 import com.digdes.school.models.Member;
-import com.digdes.school.repos.MemberRepository;
+import com.digdes.school.repos.AbstractMemberRepository;
 import com.digdes.school.services.MemberService;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper = new MemberMapper();
-    private final MemberRepository<Member> memberRepository = new MemberDaoJdbc(
+    private final AbstractMemberRepository<Member> abstractMemberRepository = new MemberDaoJdbc(
             "jdbc:postgresql://localhost:5432/project_management_sys",
             "postgres",
             "alexey"
@@ -25,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO create(CreateUpdateMemberDTO newMember) {
         Member member = memberMapper.create(newMember);
-        member = memberRepository.create(member);
+        member = abstractMemberRepository.create(member);
         return memberMapper.map(member);
     }
 
@@ -33,19 +33,19 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO update(CreateUpdateMemberDTO dto) {
         Member member = memberMapper.create(dto);
         member.setId(dto.getId());
-        member = memberRepository.update(member);
+        member = abstractMemberRepository.update(member);
         return memberMapper.map(member);
     }
 
     @Override
     public MemberDTO delete(Long id) {
-        Member member = memberRepository.deleteById(id);
+        Member member = abstractMemberRepository.deleteById(id);
         return memberMapper.map(member);
     }
 
     @Override
     public List<MemberDTO> search(SearchMemberFilter filter) {
-        List<Member> members = memberRepository.searchMembers(filter);
+        List<Member> members = abstractMemberRepository.searchMembers(filter);
         return members.stream()
                 .map(memberMapper::map)
                 .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO getMember(Long id) {
-        Optional<Member> member = memberRepository.getById(id);
+        Optional<Member> member = abstractMemberRepository.getById(id);
         if (member.isEmpty()) {
             return new MemberDTO();
         }
@@ -67,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberDTO> getAll() {
-        List<Member> members = memberRepository.getAll();
+        List<Member> members = abstractMemberRepository.getAll();
         return members.stream()
                 .map(memberMapper::map)
                 .collect(Collectors.toList());

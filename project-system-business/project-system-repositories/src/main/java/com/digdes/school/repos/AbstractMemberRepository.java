@@ -5,6 +5,6 @@ import com.digdes.school.models.Member;
 
 import java.util.List;
 
-public interface MemberRepository <M extends Member> extends Repository<M> {
+public interface AbstractMemberRepository<M extends Member> extends Repository<M> {
     List<Member> searchMembers(SearchMemberFilter filter);
 }

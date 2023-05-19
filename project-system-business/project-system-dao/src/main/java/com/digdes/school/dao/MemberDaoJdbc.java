@@ -3,12 +3,12 @@ package com.digdes.school.dao;
 import com.digdes.school.dto.member.SearchMemberFilter;
 import com.digdes.school.models.Member;
 import com.digdes.school.models.statuses.MemberStatus;
-import com.digdes.school.repos.MemberRepository;
+import com.digdes.school.repos.AbstractMemberRepository;
 
 import java.sql.*;
 import java.util.*;
 
-public class MemberDaoJdbc implements MemberRepository<Member> {
+public class MemberDaoJdbc implements AbstractMemberRepository<Member> {
 
     private final String dbUrl;
 
