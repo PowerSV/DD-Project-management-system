@@ -45,8 +45,10 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             if (generatedKeys.next()) {
                 member = tableEntityToObject(generatedKeys);
             }
-            return member;
+            ps.close();
+            generatedKeys.close();
 
+            return member;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +78,9 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             if (generatedKeys.next()) {
                 member = tableEntityToObject(generatedKeys);
             }
+            ps.close();
+            generatedKeys.close();
+
             return member;
 
         } catch (SQLException e) {
@@ -111,6 +116,9 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             if (generatedKeys.next()) {
                 return new Member();
             }
+            ps.close();
+            generatedKeys.close();
+
             return deletedMember;
 
         } catch (SQLException e) {
@@ -130,6 +138,9 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             if (resultSet.next()) {
                 return Optional.of(tableEntityToObject(resultSet));
             }
+            ps.close();
+            resultSet.close();
+
             return Optional.empty();
 
         } catch (SQLException e) {
@@ -149,6 +160,9 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             while (resultSet.next()) {
                 members.add(tableEntityToObject(resultSet));
             }
+            ps.close();
+            resultSet.close();
+
             return members;
 
         } catch (SQLException e) {
@@ -188,6 +202,9 @@ public class MemberDaoJdbc implements MemberRepository<Member> {
             while (resultSet.next()) {
                 members.add(tableEntityToObject(resultSet));
             }
+            ps.close();
+            resultSet.close();
+
             return members;
 
         } catch (SQLException e) {
