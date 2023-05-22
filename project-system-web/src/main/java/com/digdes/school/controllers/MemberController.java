@@ -2,15 +2,17 @@ package com.digdes.school.controllers;
 
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
-import com.digdes.school.dto.member.SearchMemberFilter;
 import com.digdes.school.services.MemberService;
-import com.digdes.school.services.impl.MemberServiceImpl;
 
 import java.util.List;
 
 public class MemberController {
 
-    private final MemberService memberService = new MemberServiceImpl();
+    private final MemberService memberService;
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     public MemberDTO create(CreateUpdateMemberDTO request){
         return memberService.create(request);
@@ -26,10 +28,6 @@ public class MemberController {
 
     public List<MemberDTO> getAll() {
         return memberService.getAll();
-    }
-
-    public List<MemberDTO> search(SearchMemberFilter filter) {
-        return memberService.search(filter);
     }
 
     public MemberDTO deleteById(Long id) {

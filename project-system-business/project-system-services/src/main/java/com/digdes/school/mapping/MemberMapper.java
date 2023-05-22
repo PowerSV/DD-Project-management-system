@@ -3,9 +3,11 @@ package com.digdes.school.mapping;
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.models.Member;
+import org.springframework.stereotype.Component;
 
 import java.util.StringJoiner;
 
+@Component
 public class MemberMapper {
 
     public Member create(CreateUpdateMemberDTO dto) {
