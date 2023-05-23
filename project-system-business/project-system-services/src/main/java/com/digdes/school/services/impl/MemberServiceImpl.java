@@ -42,6 +42,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO update(CreateUpdateMemberDTO dto) {
         Member member = memberRepository.findById(dto.getId()).orElseThrow();
+        if (!member.getStatus().equals(MemberStatus.ACTIVE)) {
+            throw new RuntimeException("You can only change the active Member");
+        }
         member.setEmail(dto.getEmail());
         member.setLastName(dto.getLastName());
         member.setFirstName(dto.getFirstName());
@@ -51,34 +54,42 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO delete(Long id) {
+    public MemberDTO deleteFromStorage(Long id) {
         Member deletedMember = memberRepository.findById(id).orElseThrow();
         memberRepository.deleteMemberById(id);
         return memberMapper.map(deletedMember);
     }
 
     @Override
+    public MemberDTO delete(Long id) {
+        Member deletedMember = memberRepository.findById(id).orElseThrow();
+        deletedMember.setStatus(MemberStatus.DELETED);
+        deletedMember = memberRepository.save(deletedMember);
+        return memberMapper.map(deletedMember);
+    }
+
+    @Override
+    public List<MemberDTO> search(String filter) {
+        return null;
+    }
+
+    @Override
     public MemberDTO getMember(Long id) {
-        Optional<Member> member = memberRepository.findById(id);
-        if (member.isEmpty()) {
-            return new MemberDTO();
-        }
-        return memberMapper.map(member.get());
+        return memberRepository.findById(id)
+                .map(memberMapper::map)
+                .orElse(new MemberDTO());
     }
 
     @Override
     public MemberDTO getMember(String account) {
-        Optional<Member> member = memberRepository.findMemberByAccount(account);
-        if (member.isEmpty()) {
-            return new MemberDTO();
-        }
-        return memberMapper.map(member.get());
+        return memberRepository.findMemberByAccount(account)
+                .map(memberMapper::map)
+                .orElse(new MemberDTO());
     }
 
     @Override
     public List<MemberDTO> getAll() {
-        List<Member> members = memberRepository.findAll();
-        return members.stream()
+        return memberRepository.findAll().stream()
                 .map(memberMapper::map)
                 .collect(Collectors.toList());
     }

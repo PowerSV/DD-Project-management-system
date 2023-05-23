@@ -1,4 +1,4 @@
-package com.digdes.school.repos.impl;
+package com.digdes.school.repos.fileStorage;
 
 import com.digdes.school.dto.member.SearchMemberFilter;
 import com.digdes.school.models.Member;

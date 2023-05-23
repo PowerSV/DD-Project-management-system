@@ -12,11 +12,15 @@ public interface MemberService {
 
     MemberDTO update(CreateUpdateMemberDTO dto);
 
+    MemberDTO deleteFromStorage(Long id);
+
     MemberDTO delete(Long id);
+
+    List<MemberDTO> search(String filter);
 
     MemberDTO getMember(Long id);
 
-    MemberDTO getMember(String uz);
+    MemberDTO getMember(String account);
 
     List<MemberDTO> getAll();
 
