@@ -16,29 +16,6 @@
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.digdes.school</groupId>
-            <artifactId>project-system-web</artifactId>
-            <version>${revision}${changelist}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.digdes.school</groupId>
-            <artifactId>project-system-dao</artifactId>
-            <version>${revision}${changelist}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-    </dependencies>
-
     <build>
         <finalName>sample</finalName>
         <plugins>
@@ -48,7 +25,7 @@
                     <finalName>sample-exec</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.digdes.school.app.MainApp</mainClass>
+                            <mainClass>com.digdes.school.MainApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -63,5 +40,41 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.digdes.school</groupId>
+            <artifactId>project-system-services</artifactId>
+            <version>${revision}${changelist}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.digdes.school</groupId>
+            <artifactId>project-system-repositories</artifactId>
+            <version>${revision}${changelist}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.digdes.school</groupId>
+            <artifactId>project-system-web</artifactId>
+            <version>${revision}${changelist}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.digdes.school</groupId>
+            <artifactId>project-system-dao</artifactId>
+            <version>${revision}${changelist}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>
