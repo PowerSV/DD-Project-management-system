@@ -3,6 +3,7 @@ package com.digdes.school.services;
 
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
+import com.digdes.school.dto.member.SearchMemberFilter;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface MemberService {
 
     MemberDTO delete(Long id);
 
-    List<MemberDTO> search(String pattern);
+    List<MemberDTO> search(SearchMemberFilter filter);
 
     MemberDTO getMember(Long id);
 

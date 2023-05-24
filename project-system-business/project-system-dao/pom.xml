@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.digdes.school</groupId>
-        <artifactId>project-management-system</artifactId>
+        <artifactId>project-system-business</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>project-system-app</artifactId>
+    <artifactId>project-system-dao</artifactId>
 
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
@@ -19,15 +19,21 @@
     <dependencies>
         <dependency>
             <groupId>com.digdes.school</groupId>
-            <artifactId>project-system-web</artifactId>
+            <artifactId>project-system-repositories</artifactId>
             <version>${revision}${changelist}</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.digdes.school</groupId>
-            <artifactId>project-system-dao</artifactId>
+            <artifactId>project-system-models</artifactId>
             <version>${revision}${changelist}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet author="Ballo.Alexey" id="insertData-member">
+        <sql>
+            <![CDATA[
+            INSERT INTO member (account, email, firstname, lastname, middleName, position, status)
+            VALUES ('ivanov.ivan', 'ivanov.ivan@example.com', 'Ivan', 'Ivanov', NULL, 'tester', 'active'),
+                   ('roman.12', 'roman.12@example.com', 'Roman', 'Smith', NULL, 'developer', 'active'),
+                   ('germandd', 'german@example.com', 'German', 'bboy', 'B.', 'analyst', 'active');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="insertData-project">
+        <sql>
+            <![CDATA[
+            INSERT INTO project (description, name, status)
+            VALUES ('This is project 1', 'project 1', 'draft'),
+                   ('This is project 2', 'project 2', 'in_develop'),
+                   ('This is project 3', 'project 3', 'completed');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="insertData-team">
+        <sql>
+            <![CDATA[
+            INSERT INTO team (project_id)
+            VALUES (1),
+                   (2);
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet author="Ballo.Alexey" id="insertData-task">
+        <sql>
+            <![CDATA[
+            INSERT INTO task (complexity, creation_date, deadline, description, last_modified_date, name, status, asignee_id, author_id)
+            VALUES (3, CURRENT_TIMESTAMP, '2023-05-20 12:00:00+00', 'Task 1 description', NULL, 'Task 1', 'new', 1, 2),
+                   (2, CURRENT_TIMESTAMP, '2023-05-22 15:30:00+00', 'Task 2 description', NULL, 'Task 2', 'InProgress', 2, 1),
+                   (1, CURRENT_TIMESTAMP, '2023-05-25 10:00:00+00', 'Task 3 description', NULL, 'Task 3', 'closed', 3, 3);
+            ]]>
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
