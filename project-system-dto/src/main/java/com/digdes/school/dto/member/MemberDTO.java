@@ -8,4 +8,5 @@ public class MemberDTO {
     private String displayName;
     private String position;
     private String email;
+    private String status;
 }

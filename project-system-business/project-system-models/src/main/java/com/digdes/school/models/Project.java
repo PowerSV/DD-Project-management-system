@@ -18,9 +18,9 @@ public class Project {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private ProjectStatus projectStatus;
 
-    @OneToOne
+    @ManyToOne
     private Team team;
 }

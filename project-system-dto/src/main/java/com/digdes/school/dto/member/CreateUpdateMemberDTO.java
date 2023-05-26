@@ -14,4 +14,5 @@ public class CreateUpdateMemberDTO {
     private String middleName;
     private String position;
     private String email;
+    private String account;
 }

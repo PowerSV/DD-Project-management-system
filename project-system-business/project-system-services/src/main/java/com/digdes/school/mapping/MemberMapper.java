@@ -3,6 +3,7 @@ package com.digdes.school.mapping;
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.models.Member;
+import com.digdes.school.models.statuses.MemberStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.StringJoiner;
@@ -17,6 +18,7 @@ public class MemberMapper {
         member.setMiddleName(dto.getMiddleName());
         member.setEmail(dto.getEmail());
         member.setPosition(dto.getPosition());
+        member.setStatus(MemberStatus.ACTIVE);
         return member;
     }
 
@@ -35,13 +37,9 @@ public class MemberMapper {
         }
         dto.setDisplayName(displayNameJoiner.toString());
 
-        if (entity.getPosition() != null) {
-            dto.setPosition(entity.getPosition());
-        }
-
-        if (entity.getEmail() != null) {
-            dto.setEmail(entity.getEmail());
-        }
+        dto.setPosition(entity.getPosition());
+        dto.setEmail(entity.getEmail());
+        dto.setStatus(entity.getStatus().toString());
 
         return dto;
     }

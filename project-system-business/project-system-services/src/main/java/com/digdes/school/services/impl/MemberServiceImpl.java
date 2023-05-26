@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,10 +30,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO create(CreateUpdateMemberDTO newMember) {
         Member member = memberMapper.create(newMember);
-        member.setStatus(MemberStatus.ACTIVE);
-        String email = member.getEmail();
-        String account = email == null || email.isBlank() ? null : email.substring(0, email.indexOf("@"));
-        member.setAccount(account);
+        member.setAccount(getAccount(newMember));
         member = memberRepository.save(member);
         return memberMapper.map(member);
     }
@@ -49,8 +45,17 @@ public class MemberServiceImpl implements MemberService {
         member.setLastName(dto.getLastName());
         member.setFirstName(dto.getFirstName());
         member.setMiddleName(dto.getMiddleName());
+        member.setAccount(getAccount(dto));
         member = memberRepository.save(member);
         return memberMapper.map(member);
+    }
+
+    private String getAccount(CreateUpdateMemberDTO dto) {
+        String email = dto.getEmail();
+        if (dto.getAccount() == null || dto.getAccount().isBlank()) {
+            return email == null || email.isBlank() ? null : email.substring(0, email.indexOf("@"));
+        }
+        return dto.getAccount();
     }
 
     @Override
@@ -68,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.map(deletedMember);
     }
 
+    //todo: search for members
     @Override
     public List<MemberDTO> search(String filter) {
         return null;

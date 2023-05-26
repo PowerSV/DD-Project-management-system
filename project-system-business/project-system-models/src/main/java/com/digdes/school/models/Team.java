@@ -4,17 +4,19 @@ import com.digdes.school.models.statuses.MemberRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
 @Entity
 public class Team {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Project project;
+    @OneToMany
+    private List<Project> projects;
 
     @ElementCollection
     @CollectionTable(name = "team_membership", joinColumns = @JoinColumn(name = "team_id"))
