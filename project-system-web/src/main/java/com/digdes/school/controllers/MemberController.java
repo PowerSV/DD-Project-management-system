@@ -3,8 +3,11 @@ package com.digdes.school.controllers;
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.services.MemberService;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+@RestController
 
 public class MemberController {
 
