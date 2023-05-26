@@ -16,11 +16,14 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "description")
     private String description;
 
     @Column(nullable = false)
-    private Long complexity;
+    private Integer complexity;
 
     @Column(name = "creation_date", nullable = false)
     @CreationTimestamp
