@@ -29,6 +29,9 @@ public class MainApp {
         ApplicationContext context = SpringApplication.run(MainApp.class, args);
 
         MemberService memberService = context.getBean(MemberServiceImpl.class);
+        ProjectService projectService = context.getBean(ProjectServiceImpl.class);
+        TeamService teamService = context.getBean(TeamServiceImpl.class);
+        TaskService taskService = context.getBean(TaskServiceImpl.class);
 
         CreateUpdateMemberDTO newMember1 = new CreateUpdateMemberDTO(
                 100L, "Андрей", "Адреев", "Андреевич",
@@ -76,7 +79,7 @@ public class MainApp {
         System.out.println("======== All members: ");
         memberService.getAll().forEach(System.out::println);
 
-        ProjectService projectService = context.getBean(ProjectServiceImpl.class);
+
         ProjectDTO newProject1 = new ProjectDTO(100L, "system management", "description1",
                 "dasda", null);
         ProjectDTO createdProject1 = projectService.create(newProject1);
@@ -94,7 +97,6 @@ public class MainApp {
         teamComposition2.put(createdMember5, "DEVELOPER");
         newTeam2.setTeamMembership(teamComposition2);
 
-        TeamService teamService = context.getBean(TeamServiceImpl.class);
         TeamDTO createdTeam1 = teamService.create(newTeam1);
         TeamDTO createdTeam2 = teamService.create(newTeam2);
 
@@ -134,7 +136,7 @@ public class MainApp {
         Calendar calendar = new GregorianCalendar(2024, Calendar.JANUARY, 31);
         newTask1.setDeadline(calendar.getTime());
 
-        TaskService taskService = context.getBean(TaskServiceImpl.class);
+
         TaskDTO createdTask1 = taskService.create(newTask1);
         System.out.println(createdTask1);
 
