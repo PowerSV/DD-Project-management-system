@@ -1,6 +1,5 @@
 package com.digdes.school.mapping;
 
-import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.dto.team.TeamDTO;
 import com.digdes.school.models.Member;
 import com.digdes.school.models.Project;
@@ -21,21 +20,19 @@ import java.util.stream.Collectors;
 public class TeamMapper {
     private final MemberJpaRepository memberRepository;
     private final ProjectJpaRepository projectRepository;
-    private final MemberMapper memberMapper;
 
-    public TeamMapper(MemberJpaRepository memberRepository, ProjectJpaRepository projectRepository, MemberMapper memberMapper) {
+    public TeamMapper(MemberJpaRepository memberRepository, ProjectJpaRepository projectRepository) {
         this.memberRepository = memberRepository;
         this.projectRepository = projectRepository;
-        this.memberMapper = memberMapper;
     }
 
     public Team create(TeamDTO dto) {
         Team newTeam = new Team();
 
         Map<Member, MemberRole> teamMemberships = new HashMap<>();
-        for (Map.Entry<MemberDTO, String> dtoEntry : dto.getTeamMembership().entrySet()) {
-            MemberDTO memberDTO = dtoEntry.getKey();
-            Member member = memberRepository.findById(memberDTO.getId()).orElseThrow();
+        for (Map.Entry<Long, String> dtoEntry : dto.getTeamMembership().entrySet()) {
+            Long memberId = dtoEntry.getKey();
+            Member member = memberRepository.findById(memberId).orElseThrow();
             if (member.getStatus() == MemberStatus.DELETED) {
                 throw new IllegalArgumentException("You can't add deleted member " + member + " in team ");
             }
@@ -66,7 +63,7 @@ public class TeamMapper {
                 entity.getTeamMemberships().entrySet()
                         .stream()
                         .collect(Collectors.toMap(
-                                e -> memberMapper.map(e.getKey()),
+                                e -> e.getKey().getId(),
                                 e -> e.getValue().toString()
                         ))
         );

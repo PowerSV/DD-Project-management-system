@@ -1,6 +1,5 @@
 package com.digdes.school.dto.team;
 
-import com.digdes.school.dto.member.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +13,5 @@ import java.util.Map;
 public class TeamDTO {
     private Long id;
     private List<Long> projectIds;
-    private Map<MemberDTO, String> teamMembership;
+    private Map<Long, String> teamMembership;
 }
