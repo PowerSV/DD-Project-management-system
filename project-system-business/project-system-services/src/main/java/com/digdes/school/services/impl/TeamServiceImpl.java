@@ -44,7 +44,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDTO addMember(AddRemoveMemberDTO dto) {
-        Team team = teamRepository.findById(dto.getId()).orElseThrow();
+        Team team = teamRepository.findById(dto.getTeamId()).orElseThrow();
         Member member = memberRepository.findById(dto.getMemberDTO().getId()).orElseThrow();
         Map<Member, MemberRole> teamMemberships = team.getTeamMemberships();
         teamMemberships.put(member, MemberRole.valueOf(dto.getRole().toUpperCase()));
@@ -55,7 +55,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDTO removeMember(AddRemoveMemberDTO dto) {
-        Team team = teamRepository.findById(dto.getId()).orElseThrow();
+        Team team = teamRepository.findById(dto.getTeamId()).orElseThrow();
         Member member = memberRepository.findById(dto.getMemberDTO().getId()).orElseThrow();
         Map<Member, MemberRole> teamMemberships = team.getTeamMemberships();
         teamMemberships.remove(member);

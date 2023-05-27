@@ -1,7 +1,10 @@
 package com.digdes.school.controllers;
 
 import com.digdes.school.dto.project.ProjectDTO;
+import com.digdes.school.dto.team.TeamDTO;
 import com.digdes.school.services.ProjectService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
@@ -17,19 +20,23 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ProjectDTO create(@RequestBody ProjectDTO projectDTO) {
-        return projectService.create(projectDTO);
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDTO> create(@RequestBody ProjectDTO projectDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.create(projectDTO));
     }
 
-    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ProjectDTO update(@RequestBody ProjectDTO projectDTO) {
-        return projectService.update(projectDTO);
+    @PutMapping(value = "/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDTO> update(@RequestBody ProjectDTO projectDTO) {
+        return ResponseEntity.ok().body(projectService.update(projectDTO));
     }
 
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ProjectDTO getById(@RequestParam Long id) {
-        return projectService.getProject(id);
+    public ResponseEntity<ProjectDTO> getById(@RequestParam Long id) {
+        return ResponseEntity.ok().body(projectService.getProject(id));
     }
 
     // TODO
@@ -38,8 +45,16 @@ public class ProjectController {
         return null;
     }
 
-    @PutMapping(value = "/update-status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE )
-    public ProjectDTO updateStatus(@RequestBody ProjectDTO projectDTO) {
-        return projectService.updateStatus(projectDTO);
+    @PutMapping(value = "/update-status",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity<ProjectDTO> updateStatus(@RequestBody ProjectDTO projectDTO) {
+        return ResponseEntity.ok().body(projectService.updateStatus(projectDTO));
+    }
+
+    @PutMapping(value = "/{id}/set-team",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDTO> setTeam(@PathVariable Long id, @RequestBody TeamDTO teamDTO) {
+        return ResponseEntity.ok().body(projectService.setTeam(teamDTO, id));
     }
 }

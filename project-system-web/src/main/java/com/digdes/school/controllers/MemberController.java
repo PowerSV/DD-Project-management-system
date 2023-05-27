@@ -3,12 +3,14 @@ package com.digdes.school.controllers;
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.services.MemberService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -17,23 +19,28 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    public MemberDTO create(CreateUpdateMemberDTO request){
-        return memberService.create(request);
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MemberDTO> create(@RequestBody CreateUpdateMemberDTO request){
+        return ResponseEntity.ok().body(memberService.create(request));
     }
 
-    public MemberDTO update(CreateUpdateMemberDTO request) {
-        return memberService.update(request);
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MemberDTO> update(@RequestBody CreateUpdateMemberDTO request) {
+        return ResponseEntity.ok().body(memberService.update(request));
     }
 
-    public MemberDTO getById(Long id) {
-        return memberService.getMember(id);
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MemberDTO> getById(@RequestParam Long id) {
+        return ResponseEntity.ok().body(memberService.getMember(id));
     }
 
-    public List<MemberDTO> getAll() {
-        return memberService.getAll();
+    @GetMapping(value = "/all-members", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MemberDTO>> getAll() {
+        return ResponseEntity.ok().body(memberService.getAll());
     }
 
-    public MemberDTO deleteById(Long id) {
-        return memberService.delete(id);
+    @DeleteMapping(value = "delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MemberDTO> deleteById(@RequestParam Long id) {
+        return ResponseEntity.ok().body(memberService.delete(id));
     }
 }
