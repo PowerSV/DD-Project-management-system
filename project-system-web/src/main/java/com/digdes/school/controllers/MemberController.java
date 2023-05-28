@@ -19,12 +19,16 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> create(@RequestBody CreateUpdateMemberDTO request){
         return ResponseEntity.ok().body(memberService.create(request));
     }
 
-    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> update(@RequestBody CreateUpdateMemberDTO request) {
         return ResponseEntity.ok().body(memberService.update(request));
     }
@@ -34,12 +38,14 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getMember(id));
     }
 
-    @GetMapping(value = "/all-members", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all-members",
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemberDTO>> getAll() {
         return ResponseEntity.ok().body(memberService.getAll());
     }
 
-    @DeleteMapping(value = "delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "delete",
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> deleteById(@RequestParam Long id) {
         return ResponseEntity.ok().body(memberService.delete(id));
     }

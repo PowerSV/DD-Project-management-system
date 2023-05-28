@@ -34,7 +34,8 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.update(projectDTO));
     }
 
-    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get",
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProjectDTO> getById(@RequestParam Long id) {
         return ResponseEntity.ok().body(projectService.getProject(id));
     }

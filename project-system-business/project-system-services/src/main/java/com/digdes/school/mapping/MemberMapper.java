@@ -11,12 +11,13 @@ import java.util.StringJoiner;
 @Component
 public class MemberMapper {
 
-    public Member create(CreateUpdateMemberDTO dto) {
+    public <D extends CreateUpdateMemberDTO> Member create(D dto) {
         Member member = new Member();
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setMiddleName(dto.getMiddleName());
         member.setEmail(dto.getEmail());
+        member.setAccount(dto.getAccount());
         member.setPosition(dto.getPosition());
         member.setStatus(MemberStatus.ACTIVE);
         return member;

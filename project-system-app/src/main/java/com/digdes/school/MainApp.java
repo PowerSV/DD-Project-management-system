@@ -8,10 +8,8 @@ import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.dto.team.AddRemoveMemberDTO;
 import com.digdes.school.dto.team.TeamDTO;
 import com.digdes.school.models.statuses.MemberRole;
-import com.digdes.school.services.MemberService;
-import com.digdes.school.services.ProjectService;
-import com.digdes.school.services.TaskService;
-import com.digdes.school.services.TeamService;
+import com.digdes.school.security.config.SecurityConfig;
+import com.digdes.school.services.*;
 import com.digdes.school.services.impl.MemberServiceImpl;
 import com.digdes.school.services.impl.ProjectServiceImpl;
 import com.digdes.school.services.impl.TaskServiceImpl;
@@ -19,10 +17,16 @@ import com.digdes.school.services.impl.TeamServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.*;
 
-@SpringBootApplication(scanBasePackages = "com.digdes.school")
+@SpringBootApplication
+@Import({SecurityConfig.class})
 public class MainApp {
 
     public static void main(String[] args) {
@@ -142,4 +146,5 @@ public class MainApp {
 //
 //        ProjectDTO projectDTO = projectService.updateStatus(newProject2);
     }
+
 }

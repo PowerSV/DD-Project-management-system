@@ -39,4 +39,7 @@ public class Member implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private MemberStatus status;
+
+    @Column(name = "password")
+    private String password;
 }

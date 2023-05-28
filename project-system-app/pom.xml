@@ -79,6 +79,11 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.digdes.school</groupId>
+            <artifactId>project-system-security</artifactId>
+            <version>${revision}${changelist}</version>
+        </dependency>
     </dependencies>
 
 </project>

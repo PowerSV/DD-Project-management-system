@@ -30,14 +30,16 @@ public class TeamMapper {
         Team newTeam = new Team();
 
         Map<Member, MemberRole> teamMemberships = new HashMap<>();
-        for (Map.Entry<Long, String> dtoEntry : dto.getTeamMembership().entrySet()) {
-            Long memberId = dtoEntry.getKey();
-            Member member = memberRepository.findById(memberId).orElseThrow();
-            if (member.getStatus() == MemberStatus.DELETED) {
-                throw new IllegalArgumentException("You can't add deleted member " + member + " in team ");
+        if (dto.getTeamMembership() != null) {
+            for (Map.Entry<Long, String> dtoEntry : dto.getTeamMembership().entrySet()) {
+                Long memberId = dtoEntry.getKey();
+                Member member = memberRepository.findById(memberId).orElseThrow();
+                if (member.getStatus() == MemberStatus.DELETED) {
+                    throw new IllegalArgumentException("You can't add deleted member " + member + " in team ");
+                }
+                MemberRole role = MemberRole.valueOf(dtoEntry.getValue().toUpperCase());
+                teamMemberships.put(member, role);
             }
-            MemberRole role = MemberRole.valueOf(dtoEntry.getValue().toUpperCase());
-            teamMemberships.put(member, role);
         }
 
         newTeam.setTeamMemberships(teamMemberships);
