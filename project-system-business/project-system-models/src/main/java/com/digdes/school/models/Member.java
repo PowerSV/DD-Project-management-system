@@ -42,4 +42,7 @@ public class Member implements Serializable {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "authorities_role")
+    private String authoritiesRole;
 }

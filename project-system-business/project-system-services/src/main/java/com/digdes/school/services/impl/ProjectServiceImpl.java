@@ -10,26 +10,39 @@ import com.digdes.school.models.statuses.ProjectStatus;
 import com.digdes.school.repos.JpaRepos.ProjectJpaRepository;
 import com.digdes.school.repos.JpaRepos.TeamJpaRepository;
 import com.digdes.school.services.ProjectService;
+import com.digdes.school.services.TeamService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectJpaRepository projectRepository;
-    private final TeamJpaRepository teamRepository;
     private final ProjectMapper projectMapper;
+    private final TeamJpaRepository teamRepository;
     private final TeamMapper teamMapper;
+    private final TeamService teamService;
 
-    public ProjectServiceImpl(ProjectJpaRepository projectRepository, TeamJpaRepository teamRepository,
-                              ProjectMapper projectMapper, TeamMapper teamMapper) {
-        this.projectRepository = projectRepository;
-        this.teamRepository = teamRepository;
-        this.projectMapper = projectMapper;
-        this.teamMapper = teamMapper;
+    @Override
+    public List<ProjectDTO> getAll() {
+        return projectRepository.findAll().stream()
+                .map(projectMapper::map)
+                .toList();
+    }
+
+    @Override
+    public ProjectDTO deleteFromStorage(Long id) {
+        Project deletedProject = projectRepository.findById(id).orElseThrow();
+        if (deletedProject.getTeam() != null) {
+            teamService.deleteFromStorage(deletedProject.getTeam().getId());
+        }
+        projectRepository.deleteProjectById(id);
+        return projectMapper.map(deletedProject);
     }
 
     @Override
@@ -41,13 +54,12 @@ public class ProjectServiceImpl implements ProjectService {
         if (teamDTO != null) {
             if (teamDTO.getId() == null) {
                 Team team = teamMapper.create(teamDTO);
-                List<Project> projects = team.getProjects();
-                projects.add(project);
-                team.setProjects(projects);
+                team.setProject(project);
                 project.setTeam(team);
                 teamRepository.save(team);
             } else {
-                project.setTeam(teamRepository.findById(teamDTO.getId()).orElse(teamMapper.create(teamDTO)));
+                project.setTeam(teamRepository.findById(teamDTO.getId())
+                        .orElseThrow());
             }
             project = projectRepository.save(project);
         }
@@ -55,7 +67,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDTO getProject(Long id) {
+    public ProjectDTO get(Long id) {
         return projectRepository.findById(id)
                 .map(projectMapper::map)
                 .orElse(new ProjectDTO());
@@ -64,8 +76,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO update(ProjectDTO dto) {
         Project project = projectRepository.findById(dto.getId()).orElseThrow();
-        project.setName(dto.getName());
-        project.setDescription(dto.getDescription());
+        if (!dto.getName().isBlank()) {
+            project.setName(dto.getName());
+        }
+        if (!dto.getDescription().isBlank()) {
+            project.setDescription(dto.getDescription());
+        }
         project = projectRepository.save(project);
         return projectMapper.map(project);
     }
@@ -81,17 +97,15 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(projectId).orElseThrow();
         Team team = teamRepository.findById(teamDTO.getId()).orElse(teamMapper.create(teamDTO));
         project.setTeam(team);
-        List<Project> projects = team.getProjects();
-        projects.add(project);
-        team.setProjects(projects);
+        team.setProject(project);
         projectRepository.save(project);
         teamRepository.save(team);
         return projectMapper.map(project);
     }
 
     @Override
-    public ProjectDTO updateStatus(ProjectDTO dto) {
-        Project project = projectRepository.findById(dto.getId()).orElseThrow();
+    public ProjectDTO updateStatus(Long id) {
+        Project project = projectRepository.findById(id).orElseThrow();
         ProjectStatus currentStatus = project.getProjectStatus();
         project.setProjectStatus(getNextStatus(currentStatus));
         project = projectRepository.save(project);

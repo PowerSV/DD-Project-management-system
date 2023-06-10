@@ -5,14 +5,7 @@ import com.digdes.school.dto.task.TaskDTO;
 
 import java.util.List;
 
-public interface TaskService {
-    TaskDTO getTask(Long id);
-
-    TaskDTO create(CreateTaskDTO dto);
-
-    TaskDTO update(CreateTaskDTO dto);
-
+public interface TaskService extends Service<TaskDTO, CreateTaskDTO> {
     List<TaskDTO> search();
-
     TaskDTO updateStatus(Long id);
 }

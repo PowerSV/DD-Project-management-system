@@ -2,7 +2,11 @@ package com.digdes.school.mapping;
 
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
+import com.digdes.school.dto.member.MemberRoleDTO;
 import com.digdes.school.models.Member;
+import com.digdes.school.models.Team;
+import com.digdes.school.models.TeamMember;
+import com.digdes.school.models.statuses.MemberRole;
 import com.digdes.school.models.statuses.MemberStatus;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +24,7 @@ public class MemberMapper {
         member.setAccount(dto.getAccount());
         member.setPosition(dto.getPosition());
         member.setStatus(MemberStatus.ACTIVE);
+        member.setAuthoritiesRole("ROLE_USER");
         return member;
     }
 
@@ -43,5 +48,17 @@ public class MemberMapper {
         dto.setStatus(entity.getStatus().toString());
 
         return dto;
+    }
+
+    public TeamMember createTeamMember(Member member, Team team, String role) {
+        return TeamMember.builder()
+                .role(MemberRole.valueOf(role.toUpperCase()))
+                .member(member)
+                .team(team)
+                .build();
+    }
+
+    public MemberRoleDTO mapToMemberRoleDTO(TeamMember teamMember) {
+        return new MemberRoleDTO(map(teamMember.getMember()), teamMember.getRole().toString());
     }
 }

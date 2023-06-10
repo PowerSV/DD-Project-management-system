@@ -4,24 +4,24 @@ import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.models.Member;
+import com.digdes.school.models.MemberDetails;
 import com.digdes.school.models.Task;
 import com.digdes.school.models.statuses.TaskStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class TaskMapper {
 
     private final MemberJpaRepository memberRepository;
     private final MemberMapper memberMapper;
 
-    public TaskMapper(MemberJpaRepository memberRepository, MemberMapper memberMapper) {
-        this.memberRepository = memberRepository;
-        this.memberMapper = memberMapper;
-    }
 
     public Task create(CreateTaskDTO dto) {
         Task task = new Task();
@@ -44,9 +44,11 @@ public class TaskMapper {
         task.setDeadline(dto.getDeadline());
         task.setStatus(TaskStatus.NEW);
 
-        if (dto.getAuthor() != null) {
-            task.setAuthor(memberRepository.findById(dto.getAuthor().getId()).orElse(null));
-        }
+        MemberDetails principal = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        task.setAuthor(principal.getMember());
         return task;
     }
 

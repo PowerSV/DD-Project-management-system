@@ -21,6 +21,6 @@ public class Project {
     @Column(name = "status", nullable = false)
     private ProjectStatus projectStatus;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
     private Team team;
 }

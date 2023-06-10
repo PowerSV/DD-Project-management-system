@@ -2,9 +2,11 @@ package com.digdes.school.models;
 
 import com.digdes.school.models.statuses.MemberStatus;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class MemberDetails implements UserDetails {
 
@@ -16,7 +18,7 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(member.getAuthoritiesRole()));
     }
 
     @Override
@@ -47,5 +49,9 @@ public class MemberDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return member.getStatus() == MemberStatus.ACTIVE;
+    }
+
+    public Member getMember() {
+        return member;
     }
 }

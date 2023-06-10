@@ -1,17 +1,28 @@
 package com.digdes.school.dto.team;
 
+import com.digdes.school.dto.member.MemberRoleDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Объект для взамидествия с командой")
 public class TeamDTO {
+
+    @Schema(description = "Идентификатор команды")
     private Long id;
-    private List<Long> projectIds;
-    private Map<Long, String> teamMembership;
+
+    @Schema(description = "Идентификатор проекта, над которым работает команда")
+    private Long projectId;
+
+    @Schema(description = "Наименование проекта")
+    private String projectName;
+
+    @Schema(description = "Члены команды")
+    private List<MemberRoleDTO> teamMembers;
 }

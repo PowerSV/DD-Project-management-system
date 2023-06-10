@@ -3,11 +3,14 @@ package com.digdes.school.services.impl;
 import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.mapping.TaskMapper;
+import com.digdes.school.models.MemberDetails;
 import com.digdes.school.models.Task;
 import com.digdes.school.models.statuses.TaskStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
 import com.digdes.school.repos.JpaRepos.TaskJpaRepository;
 import com.digdes.school.services.TaskService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class TaskServiceImpl implements TaskService {
 
@@ -22,17 +26,18 @@ public class TaskServiceImpl implements TaskService {
     private final MemberJpaRepository memberRepository;
     private final TaskMapper taskMapper;
 
-    public TaskServiceImpl(TaskJpaRepository taskRepository, MemberJpaRepository memberRepository, TaskMapper taskMapper) {
-        this.taskRepository = taskRepository;
-        this.memberRepository = memberRepository;
-        this.taskMapper = taskMapper;
-    }
-
     @Override
-    public TaskDTO getTask(Long id) {
+    public TaskDTO get(Long id) {
         return taskRepository.findById(id)
                 .map(taskMapper::map)
                 .orElseThrow();
+    }
+
+    @Override
+    public List<TaskDTO> getAll() {
+        return taskRepository.findAll().stream()
+                .map(taskMapper::map)
+                .toList();
     }
 
     @Override
@@ -45,13 +50,28 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO update(CreateTaskDTO dto) {
         Task task = taskRepository.findById(dto.getId()).orElseThrow();
-        task.setName(dto.getName());
-        task.setDescription(dto.getDescription());
-        task.setAuthor(memberRepository.findById(dto.getAuthor().getId()).orElseThrow());
-        task.setAssignee(memberRepository.findById(dto.getAssignee().getId()).orElseThrow());
-        task.setComplexity(dto.getComplexity());
+        if (!dto.getName().isBlank()) {
+            task.setName(dto.getName());
+        }
+        if (!dto.getDescription().isBlank()) {
+            task.setDescription(dto.getDescription());
+        }
+        if (dto.getAssignee() != null) {
+            task.setAssignee(memberRepository.findById(dto.getAssignee().getId()).orElseThrow());
+        }
+        if (dto.getComplexity() != null) {
+            task.setComplexity(dto.getComplexity());
+        }
+        if (dto.getDeadline() != null) {
+            task.setDeadline(dto.getDeadline());
+        }
+
+        MemberDetails principal = (MemberDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        task.setAuthor(principal.getMember());
         task.setLastModified(Calendar.getInstance().getTime());
-        task.setDeadline(dto.getDeadline());
         task = taskRepository.save(task);
         return taskMapper.map(task);
     }
@@ -69,6 +89,13 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(getNextStatus(currentStatus));
         task = taskRepository.save(task);
         return taskMapper.map(task);
+    }
+
+    @Override
+    public TaskDTO deleteFromStorage(Long id) {
+        Task deletedTask = taskRepository.findById(id).orElseThrow();
+        taskRepository.deleteTaskById(id);
+        return taskMapper.map(deletedTask);
     }
 
     private TaskStatus getNextStatus(TaskStatus status) {

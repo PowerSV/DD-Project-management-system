@@ -16,6 +16,8 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long>, JpaSpe
     @Query("DELETE FROM Member m WHERE m.id = :id")
     void deleteMemberById(@Param("id") Long id);
 
+    void deleteByEmail(String email);
+
     Optional<Member> findMemberByAccount(String account);
 
     Optional<Member> findByEmail(String email);

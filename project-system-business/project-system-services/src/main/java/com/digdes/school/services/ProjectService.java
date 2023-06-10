@@ -6,17 +6,10 @@ import com.digdes.school.models.statuses.ProjectStatus;
 
 import java.util.List;
 
-public interface ProjectService {
-
-    ProjectDTO create(ProjectDTO dto);
-
-    ProjectDTO getProject(Long id);
-
-    ProjectDTO update(ProjectDTO dto);
+public interface ProjectService extends Service<ProjectDTO, ProjectDTO> {
 
     List<ProjectDTO> search(String name, List<ProjectStatus> statuses);
-
-    ProjectDTO updateStatus(ProjectDTO dto);
-
+    ProjectDTO updateStatus(Long id);
     ProjectDTO setTeam(TeamDTO teamDTO, Long projectId);
+
 }

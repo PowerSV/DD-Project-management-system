@@ -22,7 +22,7 @@ public class ProjectMapper {
         return newProject;
     }
 
-    //todo: temDTO
+    //todo: teamDTO
     public ProjectDTO map(Project project) {
         return new ProjectDTO(project.getId(),
                 project.getName(),

@@ -7,25 +7,19 @@ import com.digdes.school.models.Member;
 import com.digdes.school.models.statuses.MemberStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
 import com.digdes.school.services.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
     private final MemberJpaRepository memberRepository;
-
-    @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper, MemberJpaRepository memberRepository) {
-        this.memberMapper = memberMapper;
-        this.memberRepository = memberRepository;
-    }
 
     @Override
     public MemberDTO create(CreateUpdateMemberDTO newMember) {
@@ -39,13 +33,23 @@ public class MemberServiceImpl implements MemberService {
     public MemberDTO update(CreateUpdateMemberDTO dto) {
         Member member = memberRepository.findById(dto.getId()).orElseThrow();
         if (!member.getStatus().equals(MemberStatus.ACTIVE)) {
-            throw new RuntimeException("You can only change the active Member");
+            throw new RuntimeException("Нельзя изменить удаленного сотрудника");
         }
-        member.setEmail(dto.getEmail());
-        member.setLastName(dto.getLastName());
-        member.setFirstName(dto.getFirstName());
-        member.setMiddleName(dto.getMiddleName());
-        member.setAccount(getAccount(dto));
+        if (dto.getEmail() != null) {
+            member.setEmail(dto.getEmail());
+        }
+        if (dto.getLastName() != null) {
+            member.setLastName(dto.getLastName());
+        }
+        if (dto.getFirstName() != null) {
+            member.setFirstName(dto.getFirstName());
+        }
+        if (dto.getMiddleName() != null) {
+            member.setMiddleName(dto.getMiddleName());
+        }
+        if (dto.getAccount() != null) {
+            member.setAccount(getAccount(dto));
+        }
         member = memberRepository.save(member);
         return memberMapper.map(member);
     }
@@ -80,7 +84,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO getMember(Long id) {
+    public MemberDTO get(Long id) {
         return memberRepository.findById(id)
                 .map(memberMapper::map)
                 .orElse(new MemberDTO());
@@ -97,6 +101,6 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberDTO> getAll() {
         return memberRepository.findAll().stream()
                 .map(memberMapper::map)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
