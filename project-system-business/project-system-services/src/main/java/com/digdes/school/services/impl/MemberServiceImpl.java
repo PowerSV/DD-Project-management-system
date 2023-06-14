@@ -6,12 +6,15 @@ import com.digdes.school.mapping.MemberMapper;
 import com.digdes.school.models.Member;
 import com.digdes.school.models.statuses.MemberStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
+import com.digdes.school.repos.specifications.MemberSpecification;
 import com.digdes.school.services.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,10 +80,13 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.map(deletedMember);
     }
 
-    //todo: search for members
     @Override
     public List<MemberDTO> search(String filter) {
-        return null;
+        Specification<Member> spec = MemberSpecification.searchByFilter(filter);
+        return memberRepository.findAll(spec)
+                .stream()
+                .map(memberMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override

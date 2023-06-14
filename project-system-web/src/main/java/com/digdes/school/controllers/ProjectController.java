@@ -1,6 +1,7 @@
 package com.digdes.school.controllers;
 
 import com.digdes.school.dto.project.ProjectDTO;
+import com.digdes.school.dto.project.ProjectFilter;
 import com.digdes.school.dto.team.TeamDTO;
 import com.digdes.school.services.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,14 +56,15 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.getAll());
     }
 
-    // TODO: search for project
     @Operation(summary = "Поиск проекта",
-            description = "Позволяет получить проект по фильтру")
-    @GetMapping("/search")
-    public List<ProjectDTO> searchProjects() {
-        return null;
+            description = "Позволяет получить проекты по фильтру")
+    @GetMapping(value = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ProjectDTO>> searchProjects(@RequestBody ProjectFilter filter) {
+        List<ProjectDTO> foundProjects = projectService.search(filter);
+        return ResponseEntity.ok().body(foundProjects);
     }
-
 
     @Operation(summary = "Обновить статус проекта",
             description = "Позволяет перевести проект в следующий статус")

@@ -54,6 +54,15 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getAll());
     }
 
+    @Operation(summary = "Поиск сотрудников",
+            description = "Позволяет найти сотрудников по ключевому слову")
+    @GetMapping(value = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MemberDTO>> searchMembers(@RequestParam String keyword) {
+        List<MemberDTO> foundMembers = memberService.search(keyword);
+        return ResponseEntity.ok().body(foundMembers);
+    }
+
     @Operation(summary = "Удалить сотрудника",
             description = "Позволяет перевести сотрудника по идентификатору в статус удаленного")
     @DeleteMapping(value = "/delete",

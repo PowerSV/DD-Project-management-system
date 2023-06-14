@@ -2,6 +2,7 @@ package com.digdes.school.controllers;
 
 import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
+import com.digdes.school.dto.task.TaskFilter;
 import com.digdes.school.dto.task.UpdateTaskDTO;
 import com.digdes.school.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,6 +55,16 @@ public class TaskController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskDTO>> getAll() {
         return ResponseEntity.ok().body(taskService.getAll());
+    }
+
+    @Operation(summary = "Поиск задачи",
+            description = "Позволяет получить задачи по фильтру")
+    @GetMapping(value = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskDTO>> searchTasks(@RequestBody TaskFilter filter) {
+        List<TaskDTO> foundTasks = taskService.search(filter);
+        return ResponseEntity.ok().body(foundTasks);
     }
 
     @Operation(summary = "Обновить статус задачи",

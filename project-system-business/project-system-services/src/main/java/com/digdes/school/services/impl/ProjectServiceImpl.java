@@ -1,6 +1,7 @@
 package com.digdes.school.services.impl;
 
 import com.digdes.school.dto.project.ProjectDTO;
+import com.digdes.school.dto.project.ProjectFilter;
 import com.digdes.school.dto.team.TeamDTO;
 import com.digdes.school.mapping.ProjectMapper;
 import com.digdes.school.mapping.TeamMapper;
@@ -9,13 +10,16 @@ import com.digdes.school.models.Team;
 import com.digdes.school.models.statuses.ProjectStatus;
 import com.digdes.school.repos.JpaRepos.ProjectJpaRepository;
 import com.digdes.school.repos.JpaRepos.TeamJpaRepository;
+import com.digdes.school.repos.specifications.ProjectSpecification;
 import com.digdes.school.services.ProjectService;
 import com.digdes.school.services.TeamService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -86,10 +90,13 @@ public class ProjectServiceImpl implements ProjectService {
         return projectMapper.map(project);
     }
 
-    // todo: search by status, name and id
     @Override
-    public List<ProjectDTO> search(String name, List<ProjectStatus> statuses) {
-        return null;
+    public List<ProjectDTO> search(ProjectFilter filter) {
+        Specification<Project> spec = ProjectSpecification.searchByFilter(filter);
+        return projectRepository.findAll(spec)
+                .stream()
+                .map(projectMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override

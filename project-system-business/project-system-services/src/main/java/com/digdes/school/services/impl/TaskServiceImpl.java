@@ -2,20 +2,24 @@ package com.digdes.school.services.impl;
 
 import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
+import com.digdes.school.dto.task.TaskFilter;
 import com.digdes.school.mapping.TaskMapper;
 import com.digdes.school.models.MemberDetails;
 import com.digdes.school.models.Task;
 import com.digdes.school.models.statuses.TaskStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
 import com.digdes.school.repos.JpaRepos.TaskJpaRepository;
+import com.digdes.school.repos.specifications.TaskSpecification;
 import com.digdes.school.services.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,10 +80,13 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.map(task);
     }
 
-    // todo: search
     @Override
-    public List<TaskDTO> search() {
-        return null;
+    public List<TaskDTO> search(TaskFilter filter) {
+        Specification<Task> spec = TaskSpecification.searchByFilter(filter);
+        return taskRepository.findAll(spec)
+                .stream()
+                .map(taskMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
