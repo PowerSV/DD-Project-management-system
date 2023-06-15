@@ -1,6 +1,6 @@
 package com.digdes.school.dto.task;
 
-import com.digdes.school.dto.member.MemberDTO;
+import com.digdes.school.dto.member.MemberRoleDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,8 +39,8 @@ public class TaskDTO {
     private String status;
 
     @Schema(description = "Испольнитель задачи")
-    private MemberDTO assignee;
+    private MemberRoleDTO assignee;
 
     @Schema(description = "Автор задачи")
-    private MemberDTO author;
+    private MemberRoleDTO author;
 }

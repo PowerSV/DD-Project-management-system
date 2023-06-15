@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Объект для обновления задачи")
-public class UpdateTaskDTO extends CreateTaskDTO {
+public class UpdateTaskDTO {
 
     @Schema(description = "Идентификатор")
     @NotNull(message = "Поле id является обязательным")

@@ -40,8 +40,8 @@ public class Task {
     private TaskStatus status;
 
     @ManyToOne
-    private Member assignee;
+    private TeamMember assignee;
 
     @ManyToOne
-    private Member author;
+    private TeamMember author;
 }

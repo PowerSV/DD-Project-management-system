@@ -28,6 +28,11 @@ public class CreateTaskDTO {
     @NotNull(message = "Поле assignee является обязательным")
     private MemberDTO assignee;
 
+    @Schema(description = "Идентификатор проекта")
+    @NotNull(message = "Поле projectId является обязательным")
+    @Positive(message = "Идентификатор не может быть отрицательным")
+    private Long projectId;
+
     @Schema(description = "Трудозатраты - оценка, сколько в часах необходимо на исполнение задачи (обязательное поле)")
     @NotNull(message = "Поле complexity является обязательным")
     @Positive(message = "Принимает только положительные значения - сколько в часах необходимо на исполнение задачи")
