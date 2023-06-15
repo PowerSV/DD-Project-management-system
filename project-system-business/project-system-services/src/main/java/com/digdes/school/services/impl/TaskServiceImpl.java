@@ -4,6 +4,7 @@ import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.dto.task.TaskFilter;
 import com.digdes.school.mapping.TaskMapper;
+import com.digdes.school.models.Member;
 import com.digdes.school.models.MemberDetails;
 import com.digdes.school.models.Task;
 import com.digdes.school.models.statuses.TaskStatus;
@@ -61,12 +62,23 @@ public class TaskServiceImpl implements TaskService {
             task.setDescription(dto.getDescription());
         }
         if (dto.getAssignee() != null) {
+            Member newAssignee = memberRepository.findById(dto.getAssignee().getId()).orElseThrow();
+            if (taskMapper.isAssigneeDeleted(newAssignee)) {
+                throw new IllegalArgumentException("Испольнитель должен иметь статус ACTIVE");
+            }
             task.setAssignee(memberRepository.findById(dto.getAssignee().getId()).orElseThrow());
         }
         if (dto.getComplexity() != null) {
             task.setComplexity(dto.getComplexity());
         }
         if (dto.getDeadline() != null) {
+            if (taskMapper.isDeadlineAfterCreationDate(
+                    dto.getDeadline(),
+                    task.getCreationDate(),
+                    task.getComplexity())) {
+                throw new IllegalArgumentException(
+                        "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
+            }
             task.setDeadline(dto.getDeadline());
         }
 
@@ -98,18 +110,18 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.map(task);
     }
 
-    @Override
-    public TaskDTO deleteFromStorage(Long id) {
-        Task deletedTask = taskRepository.findById(id).orElseThrow();
-        taskRepository.deleteTaskById(id);
-        return taskMapper.map(deletedTask);
-    }
-
     private TaskStatus getNextStatus(TaskStatus status) {
         return switch (status) {
             case NEW -> TaskStatus.IN_PROGRESS;
             case IN_PROGRESS -> TaskStatus.DONE;
             case DONE, CLOSED -> TaskStatus.CLOSED;
         };
+    }
+
+    @Override
+    public TaskDTO deleteFromStorage(Long id) {
+        Task deletedTask = taskRepository.findById(id).orElseThrow();
+        taskRepository.deleteTaskById(id);
+        return taskMapper.map(deletedTask);
     }
 }

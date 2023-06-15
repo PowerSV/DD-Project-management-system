@@ -6,6 +6,7 @@ import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.models.Member;
 import com.digdes.school.models.MemberDetails;
 import com.digdes.school.models.Task;
+import com.digdes.school.models.statuses.MemberStatus;
 import com.digdes.school.models.statuses.TaskStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,20 @@ public class TaskMapper {
         task.setDescription(dto.getDescription());
 
         if (dto.getAssignee() != null) {
-            task.setAssignee(memberRepository.findById(dto.getAssignee().getId()).orElse(null));
+            Member assignee = memberRepository.findById(dto.getAssignee().getId()).orElseThrow();
+            if (isAssigneeDeleted(assignee)) {
+                throw new IllegalArgumentException("Испольнитель должен иметь статус ACTIVE");
+            }
+            task.setAssignee(assignee);
         }
         task.setComplexity(dto.getComplexity());
 
         Calendar calendar = Calendar.getInstance();
         task.setCreationDate(calendar.getTime());
         task.setLastModified(calendar.getTime());
-        calendar.add(Calendar.HOUR_OF_DAY, dto.getComplexity());
-        Date minDeadline = calendar.getTime();
-        if (dto.getDeadline().before(minDeadline)) {
-            throw new RuntimeException("You cannot select a date if the date is less than the creation date + complexity");
+        if (!isDeadlineAfterCreationDate(task.getDeadline(), task.getCreationDate(), task.getComplexity())) {
+            throw new IllegalArgumentException(
+                    "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
         }
         task.setDeadline(dto.getDeadline());
         task.setStatus(TaskStatus.NEW);
@@ -50,6 +54,21 @@ public class TaskMapper {
                 .getPrincipal();
         task.setAuthor(principal.getMember());
         return task;
+    }
+
+    public boolean isDeadlineAfterCreationDate(Date deadline, Date creationDate, int complexity) {
+        Calendar deadlineDate = Calendar.getInstance();
+        deadlineDate.setTime(deadline);
+
+        Calendar minDeadlineDate = Calendar.getInstance();
+        minDeadlineDate.setTime(creationDate);
+        minDeadlineDate.add(Calendar.HOUR_OF_DAY, complexity);
+
+        return deadlineDate.after(minDeadlineDate);
+    }
+
+    public boolean isAssigneeDeleted(Member assignee) {
+        return assignee.getStatus() == MemberStatus.DELETED;
     }
 
     public TaskDTO map(Task task) {
