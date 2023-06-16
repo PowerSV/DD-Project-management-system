@@ -88,14 +88,14 @@ public class TaskServiceImpl implements TaskService {
             task.setComplexity(dto.getComplexity());
         }
         if (dto.getDeadline() != null) {
-            if (taskMapper.isDeadlineAfterCreationDate(
-                    dto.getDeadline(),
-                    task.getCreationDate(),
-                    task.getComplexity())) {
-                throw new IllegalArgumentException(
-                        "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
-            }
             task.setDeadline(dto.getDeadline());
+        }
+        if (taskMapper.isDeadlineAfterCreationDate(
+                task.getDeadline(),
+                task.getCreationDate(),
+                task.getComplexity())) {
+            throw new IllegalArgumentException(
+                    "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
         }
 
         task.setLastModified(Calendar.getInstance().getTime());

@@ -17,4 +17,9 @@ public interface TeamMemberJpaRepository extends JpaRepository<TeamMember, Long>
     @Modifying
     @Query("DELETE FROM TeamMember tm WHERE tm.team = :team")
     void deleteByTeam(@Param("team") Team team);
+
+
+    @Modifying
+    @Query("DELETE FROM TeamMember tm WHERE tm.member.email = :email")
+    void deleteTeamMemberByEmail(@Param("email") String email);
 }
