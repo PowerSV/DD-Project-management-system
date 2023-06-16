@@ -75,10 +75,10 @@ public class TaskServiceImpl implements TaskService {
         TeamMember authorTeamMember = getMemberInProjectTeam(author, task.getAuthor().getTeam().getProject());
         task.setAuthor(authorTeamMember);
 
-        if (!dto.getName().isBlank()) {
+        if (dto.getName() != null) {
             task.setName(dto.getName());
         }
-        if (!dto.getDescription().isBlank()) {
+        if (dto.getDescription() != null) {
             task.setDescription(dto.getDescription());
         }
 
@@ -90,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
         if (dto.getDeadline() != null) {
             task.setDeadline(dto.getDeadline());
         }
-        if (taskMapper.isDeadlineAfterCreationDate(
+        if (!taskMapper.isDeadlineAfterCreationDate(
                 task.getDeadline(),
                 task.getCreationDate(),
                 task.getComplexity())) {
@@ -115,6 +115,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private TeamMember getMemberInProjectTeam(Member member, Project project) {
+        if (project.getTeam() == null) {
+            throw new IllegalArgumentException(
+                    "Автором либо исполнителем задачи может являться только участник проекта");
+        }
         return getMemberInTeam(member, project.getTeam());
     }
 
