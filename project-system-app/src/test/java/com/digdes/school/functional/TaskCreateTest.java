@@ -1,4 +1,4 @@
-package com.digdes.school.task;
+package com.digdes.school.functional;
 
 import com.digdes.school.dto.member.MemberDTO;
 import com.digdes.school.dto.task.CreateTaskDTO;

@@ -70,12 +70,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.digdes.school</groupId>
-            <artifactId>project-system-dao</artifactId>
-            <version>${revision}${changelist}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>

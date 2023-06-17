@@ -1,4 +1,4 @@
-package com.digdes.school.services.unit;
+package com.digdes.school.unit;
 
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;

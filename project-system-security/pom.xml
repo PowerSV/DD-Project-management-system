@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.digdes.school</groupId>
         <artifactId>project-management-system</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>${revision}${changelist}</version>
     </parent>
 
     <artifactId>project-system-security</artifactId>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.digdes.school</groupId>
             <artifactId>project-system-services</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${revision}${changelist}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

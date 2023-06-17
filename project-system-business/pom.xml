@@ -15,7 +15,6 @@
         <module>project-system-services</module>
         <module>project-system-models</module>
         <module>project-system-repositories</module>
-        <module>project-system-dao</module>
     </modules>
 
     <properties>
