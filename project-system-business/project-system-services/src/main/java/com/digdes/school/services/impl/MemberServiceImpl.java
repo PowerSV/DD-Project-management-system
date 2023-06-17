@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.map(member);
     }
 
-    private String getAccount(CreateUpdateMemberDTO dto) {
+    public String getAccount(CreateUpdateMemberDTO dto) {
         String email = dto.getEmail();
         if (dto.getAccount() == null || dto.getAccount().isBlank()) {
             return email == null || email.isBlank() ? null : email.substring(0, email.indexOf("@"));
