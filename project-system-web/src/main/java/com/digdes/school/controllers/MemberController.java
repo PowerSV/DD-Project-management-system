@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @Tag(name = "MemberController", description = "Контроллер сотрудников")
+@Log4j2
 public class MemberController {
 
     private final MemberService memberService;
@@ -27,6 +29,7 @@ public class MemberController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> create(@RequestBody @Valid CreateUpdateMemberDTO request){
+        log.info("Received create member request");
         return ResponseEntity.ok().body(memberService.create(request));
     }
 
@@ -36,6 +39,7 @@ public class MemberController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> update(@RequestBody @Valid CreateUpdateMemberDTO request) {
+        log.info("Received update member request");
         return ResponseEntity.ok().body(memberService.update(request));
     }
 
@@ -43,6 +47,7 @@ public class MemberController {
             description = "Позволяет получить сотрудника по идентификатору")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> getById(@RequestParam Long id) {
+        log.info("Received get member by id request");
         return ResponseEntity.ok().body(memberService.get(id));
     }
 
@@ -51,6 +56,7 @@ public class MemberController {
     @GetMapping(value = "/all-members",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemberDTO>> getAll() {
+        log.info("Received get all members request");
         return ResponseEntity.ok().body(memberService.getAll());
     }
 
@@ -59,6 +65,7 @@ public class MemberController {
     @GetMapping(value = "/search",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MemberDTO>> searchMembers(@RequestParam String keyword) {
+        log.info("Received search members request");
         List<MemberDTO> foundMembers = memberService.search(keyword);
         return ResponseEntity.ok().body(foundMembers);
     }
@@ -68,6 +75,7 @@ public class MemberController {
     @DeleteMapping(value = "/delete",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> deleteById(@RequestParam Long id) {
+        log.info("Received delete member by id request");
         return ResponseEntity.ok().body(memberService.delete(id));
     }
 
@@ -76,6 +84,7 @@ public class MemberController {
     @DeleteMapping(value = "/delete-from-storage",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MemberDTO> deleteFromStorage(@RequestParam Long id) {
+        log.info("Received delete member from storage request");
         return ResponseEntity.ok().body(memberService.deleteFromStorage(id));
     }
 }

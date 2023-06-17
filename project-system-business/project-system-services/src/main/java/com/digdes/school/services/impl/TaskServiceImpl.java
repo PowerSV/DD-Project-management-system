@@ -15,6 +15,7 @@ import com.digdes.school.repos.JpaRepos.TaskJpaRepository;
 import com.digdes.school.repos.specifications.TaskSpecification;
 import com.digdes.school.services.TaskService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Log4j2
 public class TaskServiceImpl implements TaskService {
 
     private final TaskJpaRepository taskRepository;
@@ -36,6 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO get(Long id) {
+        log.info("Getting task by ID: {}", id);
         return taskRepository.findById(id)
                 .map(taskMapper::map)
                 .orElseThrow();
@@ -43,6 +46,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> getAll() {
+        log.info("Getting all tasks");
         return taskRepository.findAll().stream()
                 .map(taskMapper::map)
                 .toList();
@@ -50,6 +54,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO create(CreateTaskDTO dto) {
+        log.info("Creating new task");
         Project project = projectRepository.findById(dto.getProjectId()).orElseThrow();
         Member author = getAuthor();
         TeamMember authorTeamMember = getMemberInProjectTeam(author, project);
@@ -59,9 +64,11 @@ public class TaskServiceImpl implements TaskService {
         setAssigneeOnTask(dto.getAssignee(), newTask);
 
         newTask = taskRepository.save(newTask);
+        log.info("New task created: {}", newTask);
         return taskMapper.map(newTask);
     }
 
+    @Deprecated
     @Override
     public TaskDTO update(CreateTaskDTO dto) {
         return null;
@@ -69,6 +76,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO update(UpdateTaskDTO dto) {
+        log.info("Updating task");
         Task task = taskRepository.findById(dto.getId()).orElseThrow();
 
         Member author = getAuthor();
@@ -94,12 +102,14 @@ public class TaskServiceImpl implements TaskService {
                 task.getDeadline(),
                 task.getCreationDate(),
                 task.getComplexity())) {
+            log.error("complexity + creationDate натсупает позже чем дедлайн");
             throw new IllegalArgumentException(
                     "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
         }
 
         task.setLastModified(Calendar.getInstance().getTime());
         task = taskRepository.save(task);
+        log.info("Task updated: {}", task);
         return taskMapper.map(task);
     }
 
@@ -154,10 +164,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO updateStatus(Long id) {
+        log.info("Updating task status. Task ID: {}", id);
         Task task = taskRepository.findById(id).orElseThrow();
         TaskStatus currentStatus = task.getStatus();
         task.setStatus(getNextStatus(currentStatus));
         task = taskRepository.save(task);
+        log.info("Task status updated. Task ID: {}, New status: {}", id, task.getStatus());
         return taskMapper.map(task);
     }
 
@@ -171,8 +183,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO deleteFromStorage(Long id) {
+        log.info("Deleting task from storage. Task ID: {}", id);
         Task deletedTask = taskRepository.findById(id).orElseThrow();
         taskRepository.deleteTaskById(id);
+        log.info("Task deleted from storage. Deleted task: {}", deletedTask);
         return taskMapper.map(deletedTask);
     }
 }

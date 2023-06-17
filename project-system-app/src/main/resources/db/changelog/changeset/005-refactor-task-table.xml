@@ -5,6 +5,39 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
 
+    <changeSet id="insert-data-team_members" author="Ballo.Alexey">
+        <insert tableName="team_member">
+            <column name="team_id" value="1"/>
+            <column name="member_id" value="1"/>
+            <column name="role" value="TESTER"/>
+        </insert>
+        <insert tableName="team_member">
+            <column name="team_id" value="2"/>
+            <column name="member_id" value="3"/>
+            <column name="role" value="DEVELOPER"/>
+        </insert>
+        <insert tableName="team_member">
+            <column name="team_id" value="2"/>
+            <column name="member_id" value="2"/>
+            <column name="role" value="ANALYST"/>
+        </insert>
+        <insert tableName="team_member">
+            <column name="team_id" value="2"/>
+            <column name="member_id" value="1"/>
+            <column name="role" value="TESTER"/>
+        </insert>
+        <insert tableName="team_member">
+            <column name="team_id" value="3"/>
+            <column name="member_id" value="1"/>
+            <column name="role" value="TESTER"/>
+        </insert>
+        <insert tableName="team_member">
+            <column name="team_id" value="3"/>
+            <column name="member_id" value="2"/>
+            <column name="role" value="TESTER"/>
+        </insert>
+    </changeSet>
+
     <changeSet id="refactor-fk-task-table" author="Ballo.Alexey">
         <dropAllForeignKeyConstraints baseTableName="task"/>
         <addForeignKeyConstraint baseTableName="task"
@@ -18,5 +51,6 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_task_author"/>
     </changeSet>
+
 
 </databaseChangeLog>

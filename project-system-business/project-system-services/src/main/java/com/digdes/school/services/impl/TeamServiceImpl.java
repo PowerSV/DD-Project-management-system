@@ -15,6 +15,7 @@ import com.digdes.school.repos.JpaRepos.TeamJpaRepository;
 import com.digdes.school.repos.JpaRepos.TeamMemberJpaRepository;
 import com.digdes.school.services.TeamService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Log4j2
 public class TeamServiceImpl implements TeamService {
 
     private final TeamJpaRepository teamRepository;
@@ -35,6 +37,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<TeamDTO> getAll() {
+        log.info("Getting all teams");
         return teamRepository.findAll().stream()
                 .map(teamMapper::map)
                 .toList();
@@ -42,16 +45,19 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDTO create(TeamDTO dto) {
+        log.info("Creating team: {}", dto);
         Team newTeam = teamMapper.create(dto);
         newTeam = teamRepository.save(newTeam);
         if (!newTeam.getTeamMembers().isEmpty()) {
             teamMemberRepository.saveAll(newTeam.getTeamMembers());
         }
+        log.info("Created team: {}", newTeam);
         return teamMapper.map(newTeam);
     }
 
     @Override
     public TeamDTO update(TeamDTO teamDTO) {
+        log.info("Updating team: {}", teamDTO.getId());
         Team team = teamRepository.findById(teamDTO.getId())
                 .orElseThrow();
 
@@ -61,19 +67,19 @@ public class TeamServiceImpl implements TeamService {
             team.setProject(project);
         }
         if (teamDTO.getTeamMembers() != null) {
-            System.out.println(12345);
+            log.info("Updating team members");
             teamMemberRepository.deleteByTeam(team);
-            System.out.println(67890);
             List<TeamMember> newTeamMembers = teamMapper.createNewTeamMembers(teamDTO.getTeamMembers(), team);
             team.setTeamMembers(newTeamMembers);
         }
-
         team = teamRepository.save(team);
+        log.info("Updated team: {}", team);
         return teamMapper.map(team);
     }
 
     @Override
     public TeamDTO get(Long id) {
+        log.info("Getting team: {}", id);
         return teamRepository.findById(id)
                 .map(teamMapper::map)
                 .orElse(new TeamDTO());
@@ -81,6 +87,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDTO addMember(AddMemberDTO dto) {
+        log.info("Adding member to team: teamId={}, memberId={}", dto.getTeamId(), dto.getMemberId());
         Team team = teamRepository.findById(dto.getTeamId()).orElseThrow();
         Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
 
@@ -91,11 +98,13 @@ public class TeamServiceImpl implements TeamService {
         teamMemberList.add(teamMember);
         team.setTeamMembers(teamMemberList);
         team = teamRepository.save(team);
+        log.info("add member successfully. Team: {}", team);
         return teamMapper.map(team);
     }
 
     @Override
     public TeamDTO removeMember(RemoveMemberDTO dto) {
+        log.info("Removing member from team: teamId={}, memberId={}", dto.getTeamId(), dto.getMemberId());
         Team team = teamRepository.findById(dto.getTeamId()).orElseThrow();
 
         Member member = memberRepository.findById(dto.getMemberId()).orElseThrow();
@@ -112,17 +121,20 @@ public class TeamServiceImpl implements TeamService {
         }
 
         team = teamRepository.save(team);
+        log.info("Remove member successfully. Team: {}", team);
         return teamMapper.map(team);
     }
 
     @Override
     public TeamDTO deleteFromStorage(Long id) {
+        log.info("Deleting team from storage: {}", id);
         Team deletedTeam = teamRepository.findById(id).orElseThrow();
         if (deletedTeam.getTeamMembers() != null) {
             teamMemberRepository.deleteAll(deletedTeam.getTeamMembers());
             deletedTeam.setTeamMembers(null);
         }
         teamRepository.deleteTeamById(id);
+        log.info("Deleted team from storage: {}", deletedTeam);
         return teamMapper.map(deletedTeam);
     }
 }

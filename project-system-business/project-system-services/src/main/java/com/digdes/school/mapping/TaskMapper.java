@@ -7,6 +7,7 @@ import com.digdes.school.models.Task;
 import com.digdes.school.models.TeamMember;
 import com.digdes.school.models.statuses.TaskStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -14,11 +15,13 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class TaskMapper {
 
     private final MemberMapper memberMapper;
 
     public Task create(CreateTaskDTO dto) {
+        log.info("Creating new task");
         Task task = new Task();
         task.setName(dto.getName());
         task.setDescription(dto.getDescription());
@@ -29,16 +32,18 @@ public class TaskMapper {
         task.setCreationDate(calendar.getTime());
         task.setLastModified(calendar.getTime());
         if (!isDeadlineAfterCreationDate(dto.getDeadline(), task.getCreationDate(), task.getComplexity())) {
+            log.error("Попытка установить дедлайн раньше чем complexity + creationDate");
             throw new IllegalArgumentException(
                     "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
         }
         task.setDeadline(dto.getDeadline());
         task.setStatus(TaskStatus.NEW);
-
+        log.info("New task created: {}", task);
         return task;
     }
 
     public boolean isDeadlineAfterCreationDate(Date deadline, Date creationDate, int complexity) {
+        log.info("Checking if deadline is after creation date");
         Calendar deadlineDate = Calendar.getInstance();
         deadlineDate.setTime(deadline);
 
@@ -46,15 +51,18 @@ public class TaskMapper {
         minDeadlineDate.setTime(creationDate);
         minDeadlineDate.add(Calendar.HOUR_OF_DAY, complexity);
 
-        return deadlineDate.after(minDeadlineDate);
+        boolean isAfter = deadlineDate.after(minDeadlineDate);
+        log.info("Deadline is after creation date: {}", isAfter);
+        return isAfter;
     }
 
     public TaskDTO map(Task task) {
+        log.info("Mapping task to DTO: {}", task);
         TeamMember assignee = task.getAssignee();
         TeamMember author = task.getAuthor();
         MemberRoleDTO assigneeDTO = assignee == null ? null : memberMapper.mapToMemberRoleDTO(assignee);
         MemberRoleDTO authorDTO = author == null ? null : memberMapper.mapToMemberRoleDTO(author);
-        return new TaskDTO(
+        TaskDTO taskDTO = new TaskDTO(
                 task.getId(),
                 task.getName(),
                 task.getDescription(),
@@ -66,6 +74,8 @@ public class TaskMapper {
                 assigneeDTO,
                 authorDTO
         );
+        log.info("Mapped task to DTO: {}", taskDTO);
+        return taskDTO;
     }
 
 }

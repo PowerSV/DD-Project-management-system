@@ -10,6 +10,7 @@ import com.digdes.school.models.statuses.MemberStatus;
 import com.digdes.school.repos.JpaRepos.MemberJpaRepository;
 import com.digdes.school.repos.JpaRepos.ProjectJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,12 +18,14 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class TeamMapper {
     private final MemberJpaRepository memberRepository;
     private final ProjectJpaRepository projectRepository;
     private final MemberMapper memberMapper;
 
     public Team create(TeamDTO dto) {
+        log.info("Creating new team");
         Team newTeam = new Team();
 
         List<TeamMember> teamMembers = new ArrayList<>();
@@ -36,10 +39,12 @@ public class TeamMapper {
                     .orElseThrow();
             newTeam.setProject(project);
         }
+        log.info("New team created");
         return newTeam;
     }
 
     public List<TeamMember> createNewTeamMembers(Collection<MemberRoleDTO> teamMembersDTO, Team team) {
+        log.info("Creating new team members");
         List<TeamMember> teamMembers = new ArrayList<>();
 
         for (MemberRoleDTO teamMemberDto : teamMembersDTO) {
@@ -48,6 +53,8 @@ public class TeamMapper {
                     .orElseThrow();
 
             if (member.getStatus() == MemberStatus.DELETED) {
+                log.error("You can't add deleted member");
+
                 throw new IllegalArgumentException("You can't add deleted member " + member + " in team ");
             }
 
@@ -55,10 +62,13 @@ public class TeamMapper {
             teamMembers.add(newTeamMember);
         }
 
+        log.info("New team members created");
         return teamMembers;
     }
 
     public TeamDTO map(Team entity) {
+        log.info("Mapping team to DTO: {}", entity);
+
         if (entity == null) {
             return null;
         }
@@ -77,6 +87,8 @@ public class TeamMapper {
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
 
-        return new TeamDTO(entity.getId(), projectId, projectName, memberRoles);
+        TeamDTO teamDTO = new TeamDTO(entity.getId(), projectId, projectName, memberRoles);
+        log.info("Mapped team to DTO successfully");
+        return teamDTO;
     }
 }
