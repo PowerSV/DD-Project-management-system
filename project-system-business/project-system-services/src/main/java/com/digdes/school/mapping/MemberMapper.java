@@ -2,19 +2,33 @@ package com.digdes.school.mapping;
 
 import com.digdes.school.dto.member.CreateUpdateMemberDTO;
 import com.digdes.school.dto.member.MemberDTO;
+import com.digdes.school.dto.member.MemberRoleDTO;
 import com.digdes.school.models.Member;
+import com.digdes.school.models.Team;
+import com.digdes.school.models.TeamMember;
+import com.digdes.school.models.statuses.MemberRole;
+import com.digdes.school.models.statuses.MemberStatus;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
 import java.util.StringJoiner;
 
+@Component
+@Log4j2
 public class MemberMapper {
 
-    public Member create(CreateUpdateMemberDTO dto) {
+    public <D extends CreateUpdateMemberDTO> Member create(D dto) {
         Member member = new Member();
         member.setFirstName(dto.getFirstName());
         member.setLastName(dto.getLastName());
         member.setMiddleName(dto.getMiddleName());
         member.setEmail(dto.getEmail());
+        member.setAccount(dto.getAccount());
         member.setPosition(dto.getPosition());
+        member.setStatus(MemberStatus.ACTIVE);
+        member.setAuthoritiesRole("ROLE_USER");
+
+        log.info("Mapper create a new member");
         return member;
     }
 
@@ -33,14 +47,27 @@ public class MemberMapper {
         }
         dto.setDisplayName(displayNameJoiner.toString());
 
-        if (entity.getPosition() != null) {
-            dto.setPosition(entity.getPosition());
-        }
-
-        if (entity.getEmail() != null) {
-            dto.setEmail(entity.getEmail());
-        }
-
+        dto.setPosition(entity.getPosition());
+        dto.setEmail(entity.getEmail());
+        dto.setStatus(entity.getStatus().toString());
+        log.info("Mapped Member to DTO {}", dto);
         return dto;
+    }
+
+    public TeamMember createTeamMember(Member member, Team team, String role) {
+         TeamMember teamMember = TeamMember.builder()
+                .role(MemberRole.valueOf(role.toUpperCase()))
+                .member(member)
+                .team(team)
+                .build();
+        log.info("Created a new team member");
+        return teamMember;
+    }
+
+    public MemberRoleDTO mapToMemberRoleDTO(TeamMember teamMember) {
+        MemberDTO memberDTO = map(teamMember.getMember());
+        MemberRoleDTO memberRoleDTO = new MemberRoleDTO(memberDTO, teamMember.getRole().toString());
+        log.info("Mapped TeamMember to MemberRoleDTO {}", memberRoleDTO);
+        return memberRoleDTO;
     }
 }
