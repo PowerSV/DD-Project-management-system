@@ -60,4 +60,6 @@ com.digdes.school.models.Project management system for DigDes school
    Создание репозиториев для доступа к БД. Определение интерфейсов репозиториев и их реализаций.
    <br/><br/>
 
+## Физическую модель БД
+![db_schema.png](docs%2Fdb_schema.png)
 

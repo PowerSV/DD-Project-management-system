@@ -1,81 +1,47 @@
 package com.digdes.school.models;
 
 import com.digdes.school.models.statuses.TaskStatus;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
+@Data
+@Entity
 public class Task {
-
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String displayName;
-    private Long complexity;
-    private Date dateCreated;
-    private Date deadline;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(nullable = false)
+    private Integer complexity;
+
+    @Column(name = "creation_date", nullable = false)
+    @CreationTimestamp
+    private Date creationDate;
+
+    @Column(name = "last_modified_date")
+    @UpdateTimestamp
     private Date lastModified;
-    private TaskStatus taskStatus;
-    private Employee author;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "deadline", nullable = false)
+    private Date deadline;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
 
-    public String getDisplayName() {
-        return displayName;
-    }
+    @ManyToOne
+    private TeamMember assignee;
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public Long getComplexity() {
-        return complexity;
-    }
-
-    public void setComplexity(Long complexity) {
-        this.complexity = complexity;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public Date getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(Date deadline) {
-        this.deadline = deadline;
-    }
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
-    }
-
-    public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
-    public Employee getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Employee author) {
-        this.author = author;
-    }
+    @ManyToOne
+    private TeamMember author;
 }
