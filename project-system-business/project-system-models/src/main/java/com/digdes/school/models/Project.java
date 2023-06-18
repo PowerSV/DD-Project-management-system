@@ -1,43 +1,26 @@
 package com.digdes.school.models;
 
 import com.digdes.school.models.statuses.ProjectStatus;
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
+@Entity
 public class Project {
-
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private ProjectStatus projectStatus;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public ProjectStatus getProjectStatus() {
-        return projectStatus;
-    }
-
-    public void setProjectStatus(ProjectStatus projectStatus) {
-        this.projectStatus = projectStatus;
-    }
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
+    private Team team;
 }
