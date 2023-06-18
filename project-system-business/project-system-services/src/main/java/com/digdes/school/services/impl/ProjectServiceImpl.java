@@ -50,7 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
             teamService.deleteFromStorage(deletedProject.getTeam().getId());
         }
         projectRepository.deleteProjectById(id);
-        log.info("Deleted project: {}", deletedProject);
+        log.info("Deleted project");
         return projectMapper.map(deletedProject);
     }
 
@@ -73,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
             project = projectRepository.save(project);
         }
-        log.info("Created project: {}", project);
+        log.info("Created project: {}", project.getId());
         return projectMapper.map(project);
     }
 
@@ -96,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
             project.setDescription(dto.getDescription());
         }
         project = projectRepository.save(project);
-        log.info("Updated project: {}", project);
+        log.info("Updated project: {}", project.getId());
         return projectMapper.map(project);
     }
 
@@ -121,7 +121,7 @@ public class ProjectServiceImpl implements ProjectService {
         team.setProject(project);
         project = projectRepository.save(project);
         teamRepository.save(team);
-        log.info("Project with team: {}", project);
+        log.info("Project with team: {}", projectId);
         return projectMapper.map(project);
     }
 

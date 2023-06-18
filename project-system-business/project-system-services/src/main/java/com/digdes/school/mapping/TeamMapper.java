@@ -67,7 +67,7 @@ public class TeamMapper {
     }
 
     public TeamDTO map(Team entity) {
-        log.info("Mapping team to DTO: {}", entity);
+        log.info("Mapping team to DTO");
 
         if (entity == null) {
             return null;

@@ -5,6 +5,8 @@ import com.digdes.school.dto.task.CreateTaskDTO;
 import com.digdes.school.dto.task.TaskDTO;
 import com.digdes.school.dto.task.TaskFilter;
 import com.digdes.school.dto.task.UpdateTaskDTO;
+import com.digdes.school.email.EmailContext;
+import com.digdes.school.email.service.MailSender;
 import com.digdes.school.mapping.TaskMapper;
 import com.digdes.school.models.*;
 import com.digdes.school.models.statuses.MemberStatus;
@@ -14,15 +16,19 @@ import com.digdes.school.repos.JpaRepos.ProjectJpaRepository;
 import com.digdes.school.repos.JpaRepos.TaskJpaRepository;
 import com.digdes.school.repos.specifications.TaskSpecification;
 import com.digdes.school.services.TaskService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +40,11 @@ public class TaskServiceImpl implements TaskService {
     private final TaskJpaRepository taskRepository;
     private final MemberJpaRepository memberRepository;
     private final ProjectJpaRepository projectRepository;
+    private final MailSender emailSender;
     private final TaskMapper taskMapper;
+
+    @Value("${spring.mail.username}")
+    private String emailFrom;
 
     @Override
     public TaskDTO get(Long id) {
@@ -61,10 +71,14 @@ public class TaskServiceImpl implements TaskService {
         Task newTask = taskMapper.create(dto);
         newTask.setAuthor(authorTeamMember);
 
-        setAssigneeOnTask(dto.getAssignee(), newTask);
+        try {
+            setAssigneeOnTask(dto.getAssignee(), newTask);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
         newTask = taskRepository.save(newTask);
-        log.info("New task created: {}", newTask);
+        log.info("New task created");
         return taskMapper.map(newTask);
     }
 
@@ -90,8 +104,6 @@ public class TaskServiceImpl implements TaskService {
             task.setDescription(dto.getDescription());
         }
 
-        setAssigneeOnTask(dto.getAssignee(), task);
-
         if (dto.getComplexity() != null) {
             task.setComplexity(dto.getComplexity());
         }
@@ -107,13 +119,19 @@ public class TaskServiceImpl implements TaskService {
                     "Нельзя поставить дедлайн, если complexity + creationDate натсупает позже чем дедлайн");
         }
 
+        try {
+            setAssigneeOnTask(dto.getAssignee(), task);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
         task.setLastModified(Calendar.getInstance().getTime());
         task = taskRepository.save(task);
-        log.info("Task updated: {}", task);
+        log.info("Task updated: {}", task.getId());
         return taskMapper.map(task);
     }
 
-    private void setAssigneeOnTask(MemberDTO assignee, Task task) {
+    private void setAssigneeOnTask(MemberDTO assignee, Task task) throws MessagingException {
         if (assignee != null) {
             Member newAssignee = memberRepository.findById(assignee.getId()).orElseThrow();
             if (isAssigneeDeleted(newAssignee)) {
@@ -121,6 +139,26 @@ public class TaskServiceImpl implements TaskService {
             }
             TeamMember assigneeTeamMember = getMemberInTeam(newAssignee, task.getAuthor().getTeam());
             task.setAssignee(assigneeTeamMember);
+
+
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("name", newAssignee.getFirstName());
+            properties.put("deadline", task.getDeadline());
+            String authorDisplayName = task.getAuthor().getMember().getFirstName()
+                    + " " + task.getAuthor().getMember().getLastName();
+            properties.put("author", authorDisplayName);
+            properties.put("taskName", task.getName());
+
+            EmailContext email = EmailContext.builder()
+                    .to(newAssignee.getEmail())
+                    .from(emailFrom)
+                    .subject("Новая задача")
+                    .template("email.html")
+                    .properties(properties)
+                    .build();
+
+            emailSender.send(email);
+
         }
     }
 
@@ -186,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
         log.info("Deleting task from storage. Task ID: {}", id);
         Task deletedTask = taskRepository.findById(id).orElseThrow();
         taskRepository.deleteTaskById(id);
-        log.info("Task deleted from storage. Deleted task: {}", deletedTask);
+        log.info("Task deleted from storage. Deleted task: {}", deletedTask.getId());
         return taskMapper.map(deletedTask);
     }
 }

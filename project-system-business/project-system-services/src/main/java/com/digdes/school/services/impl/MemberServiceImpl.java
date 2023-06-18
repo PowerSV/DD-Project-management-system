@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberMapper.create(newMember);
         member.setAccount(getAccount(newMember));
         member = memberRepository.save(member);
-        log.info("New member created: {}", member);
+        log.info("New member created");
         return memberMapper.map(member);
     }
 
@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("Updating member with ID: {}", dto.getId());
         Member member = memberRepository.findById(dto.getId()).orElseThrow();
         if (!member.getStatus().equals(MemberStatus.ACTIVE)) {
-            log.error("Member status should be Active but was DELETED: {}", member);
+            log.error("Member status should be Active but was DELETED");
             throw new RuntimeException("Нельзя изменить удаленного сотрудника");
         }
         if (dto.getEmail() != null) {
@@ -60,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
             member.setAccount(getAccount(dto));
         }
         member = memberRepository.save(member);
-        log.info("Member updated: {}", member);
+        log.info("Member updated");
         return memberMapper.map(member);
     }
 
@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("Deleting member from storage with ID: {}", id);
         Member deletedMember = memberRepository.findById(id).orElseThrow();
         memberRepository.deleteMemberById(id);
-        log.info("Member deleted from storage: {}", deletedMember);
+        log.info("Member deleted from storage");
         return memberMapper.map(deletedMember);
     }
 
@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
         Member deletedMember = memberRepository.findById(id).orElseThrow();
         deletedMember.setStatus(MemberStatus.DELETED);
         deletedMember = memberRepository.save(deletedMember);
-        log.info("Member deleted: {}", deletedMember);
+        log.info("Member deleted");
         return memberMapper.map(deletedMember);
     }
 

@@ -51,7 +51,7 @@ public class TeamServiceImpl implements TeamService {
         if (!newTeam.getTeamMembers().isEmpty()) {
             teamMemberRepository.saveAll(newTeam.getTeamMembers());
         }
-        log.info("Created team: {}", newTeam);
+        log.info("Created team: {}", newTeam.getId());
         return teamMapper.map(newTeam);
     }
 
@@ -73,7 +73,7 @@ public class TeamServiceImpl implements TeamService {
             team.setTeamMembers(newTeamMembers);
         }
         team = teamRepository.save(team);
-        log.info("Updated team: {}", team);
+        log.info("Updated team: {}", team.getId());
         return teamMapper.map(team);
     }
 
@@ -98,7 +98,7 @@ public class TeamServiceImpl implements TeamService {
         teamMemberList.add(teamMember);
         team.setTeamMembers(teamMemberList);
         team = teamRepository.save(team);
-        log.info("add member successfully. Team: {}", team);
+        log.info("add member successfully. Team: {}", team.getId());
         return teamMapper.map(team);
     }
 
@@ -121,7 +121,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         team = teamRepository.save(team);
-        log.info("Remove member successfully. Team: {}", team);
+        log.info("Remove member successfully. Team: {}", team.getId());
         return teamMapper.map(team);
     }
 
@@ -134,7 +134,7 @@ public class TeamServiceImpl implements TeamService {
             deletedTeam.setTeamMembers(null);
         }
         teamRepository.deleteTeamById(id);
-        log.info("Deleted team from storage: {}", deletedTeam);
+        log.info("Deleted team from storage: {}", deletedTeam.getId());
         return teamMapper.map(deletedTeam);
     }
 }

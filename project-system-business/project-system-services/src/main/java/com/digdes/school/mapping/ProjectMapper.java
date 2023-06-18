@@ -22,16 +22,17 @@ public class ProjectMapper {
         newProject.setName(dto.getName());
         newProject.setDescription(dto.getDescription());
         newProject.setProjectStatus(ProjectStatus.DRAFT);
-        log.debug("New project created: {}", newProject);
+        log.debug("New project created");
         return newProject;
     }
 
     public ProjectDTO map(Project project) {
-        log.info("Mapping project to DTO: {}", project);
-        return new ProjectDTO(project.getId(),
+        ProjectDTO projectDTO = new ProjectDTO(project.getId(),
                 project.getName(),
                 project.getDescription(),
                 project.getProjectStatus().toString(),
                 teamMapper.map(project.getTeam()));
+        log.info("Mapping project to DTO: {}", projectDTO);
+        return projectDTO;
     }
 }

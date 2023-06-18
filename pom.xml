@@ -15,6 +15,7 @@
         <module>project-system-dto</module>
         <module>project-system-app</module>
         <module>project-system-security</module>
+        <module>project-system-email</module>
     </modules>
 
     <properties>
@@ -190,7 +191,16 @@
                 <artifactId>jackson-annotations</artifactId>
                 <version>2.15.2</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

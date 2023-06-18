@@ -28,7 +28,7 @@ public class MemberMapper {
         member.setStatus(MemberStatus.ACTIVE);
         member.setAuthoritiesRole("ROLE_USER");
 
-        log.info("Mapper create a new member: {}", member);
+        log.info("Mapper create a new member");
         return member;
     }
 
@@ -50,7 +50,7 @@ public class MemberMapper {
         dto.setPosition(entity.getPosition());
         dto.setEmail(entity.getEmail());
         dto.setStatus(entity.getStatus().toString());
-        log.info("Mapped entity {} to DTO {}", entity, dto);
+        log.info("Mapped Member to DTO {}", dto);
         return dto;
     }
 
@@ -60,14 +60,14 @@ public class MemberMapper {
                 .member(member)
                 .team(team)
                 .build();
-        log.info("Created a new team member: {}", teamMember);
+        log.info("Created a new team member");
         return teamMember;
     }
 
     public MemberRoleDTO mapToMemberRoleDTO(TeamMember teamMember) {
         MemberDTO memberDTO = map(teamMember.getMember());
         MemberRoleDTO memberRoleDTO = new MemberRoleDTO(memberDTO, teamMember.getRole().toString());
-        log.info("Mapped TeamMember {} to MemberRoleDTO {}", teamMember, memberRoleDTO);
+        log.info("Mapped TeamMember to MemberRoleDTO {}", memberRoleDTO);
         return memberRoleDTO;
     }
 }

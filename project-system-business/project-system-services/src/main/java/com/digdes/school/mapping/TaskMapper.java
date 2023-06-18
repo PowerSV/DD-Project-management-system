@@ -38,7 +38,7 @@ public class TaskMapper {
         }
         task.setDeadline(dto.getDeadline());
         task.setStatus(TaskStatus.NEW);
-        log.info("New task created: {}", task);
+        log.info("New task created");
         return task;
     }
 
@@ -57,7 +57,7 @@ public class TaskMapper {
     }
 
     public TaskDTO map(Task task) {
-        log.info("Mapping task to DTO: {}", task);
+        log.info("Mapping task to DTO");
         TeamMember assignee = task.getAssignee();
         TeamMember author = task.getAuthor();
         MemberRoleDTO assigneeDTO = assignee == null ? null : memberMapper.mapToMemberRoleDTO(assignee);
